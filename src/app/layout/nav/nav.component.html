@@ -1,0 +1,139 @@
+<nav class="navbar bg-gradient-to-r from-pink-50 to-rose-50 shadow-lg border-b border-pink-100">
+  <div class="navbar-start">
+    <div class="flex items-center space-x-2">
+      <div class="w-10 h-10 bg-gradient-to-br from-pink-400 to-rose-500 rounded-full flex items-center justify-center shadow-md">
+        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+        </svg>
+      </div>
+      <div class="text-2xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent">
+        Connectly
+      </div>
+    </div>
+  </div>
+
+  <div class="navbar-center" *ngIf="isLoggedIn()">
+    <div class="tabs tabs-boxed bg-white/70 backdrop-blur-sm shadow-sm">
+      <button 
+        class="tab transition-all duration-200"
+        [class.tab-active]="activeTab() === 'matches'"
+        [class.bg-gradient-to-r]="activeTab() === 'matches'"
+        [class.from-pink-400]="activeTab() === 'matches'"
+        [class.to-rose-400]="activeTab() === 'matches'"
+        [class.text-white]="activeTab() === 'matches'"
+        [class.shadow-md]="activeTab() === 'matches'"
+        (click)="setActiveTab('matches')">
+        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+        </svg>
+        Matches
+      </button>
+      <button 
+        class="tab transition-all duration-200"
+        [class.tab-active]="activeTab() === 'lists'"
+        [class.bg-gradient-to-r]="activeTab() === 'lists'"
+        [class.from-pink-400]="activeTab() === 'lists'"
+        [class.to-rose-400]="activeTab() === 'lists'"
+        [class.text-white]="activeTab() === 'lists'"
+        [class.shadow-md]="activeTab() === 'lists'"
+        (click)="setActiveTab('lists')">
+        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+        </svg>
+        Lists
+      </button>
+      <button 
+        class="tab transition-all duration-200"
+        [class.tab-active]="activeTab() === 'messages'"
+        [class.bg-gradient-to-r]="activeTab() === 'messages'"
+        [class.from-pink-400]="activeTab() === 'messages'"
+        [class.to-rose-400]="activeTab() === 'messages'"
+        [class.text-white]="activeTab() === 'messages'"
+        [class.shadow-md]="activeTab() === 'messages'"
+        (click)="setActiveTab('messages')">
+        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
+          <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+        </svg>
+        Messages
+      </button>
+    </div>
+  </div>
+
+  <div class="navbar-end">
+    <div class="flex items-center space-x-3" *ngIf="!isLoggedIn()">
+      <div class="form-control">
+        <input 
+          type="email" 
+          placeholder="Email" 
+          class="input input-sm bg-white/80 backdrop-blur-sm border-pink-200 focus:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-200 transition-all duration-200 w-32 lg:w-40"
+          [(ngModel)]="loginDto.email"
+          [disabled]="isLoading()"
+        />
+      </div>
+      <div class="form-control">
+        <input 
+          type="password" 
+          placeholder="Password" 
+          class="input input-sm bg-white/80 backdrop-blur-sm border-pink-200 focus:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-200 transition-all duration-200 w-32 lg:w-40"
+          [(ngModel)]="loginDto.password"
+          [disabled]="isLoading()"
+          (keyup.enter)="login()"
+        />
+      </div>
+      <button 
+        class="btn btn-sm bg-gradient-to-r from-pink-400 to-rose-500 hover:from-pink-500 hover:to-rose-600 text-white border-none shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5"
+        (click)="login()"
+        [disabled]="isLoading() || !loginDto.email || !loginDto.password"
+      >
+        <span *ngIf="!isLoading()">Login</span>
+        <span *ngIf="isLoading()" class="loading loading-spinner loading-xs"></span>
+      </button>
+    </div>
+
+    <div class="dropdown dropdown-end" *ngIf="isLoggedIn()">
+      <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar hover:bg-pink-100/50 transition-colors duration-200">
+        <div class="w-10 rounded-full bg-gradient-to-br from-pink-400 to-rose-500 flex items-center justify-center shadow-md">
+          <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+          </svg>
+        </div>
+      </div>
+      <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-lg bg-white/95 backdrop-blur-sm rounded-box w-52 border border-pink-100">
+        <li class="menu-title text-pink-600 font-semibold">
+          <span class="flex items-center space-x-2">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+            </svg>
+            <span>{{ currentUser()?.userName || currentUser()?.email }}</span>
+          </span>
+        </li>
+        <div class="divider my-1"></div>
+        <li>
+          <button 
+            class="hover:bg-pink-50 hover:text-pink-600 transition-colors duration-200"
+            (click)="editProfile()"
+          >
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
+            </svg>
+            Edit Profile
+          </button>
+        </li>
+        <li>
+          <button 
+            class="hover:bg-red-50 hover:text-red-600 transition-colors duration-200"
+            (click)="logout()"
+            [disabled]="isLoading()"
+          >
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"></path>
+            </svg>
+            <span *ngIf="!isLoading()">Logout</span>
+            <span *ngIf="isLoading()" class="loading loading-spinner loading-xs"></span>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

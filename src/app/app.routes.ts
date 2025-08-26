@@ -7,6 +7,8 @@ import { ListsComponent } from './features/lists/lists.component';
 import { MessagesComponent } from './features/messages/messages.component';
 import { authGuard } from './core/guards/auth.guard';
 import { registerationGuard } from './core/guards/registeration.guard';
+import { NotFoundComponent } from './shared/errors/not-found/not-found.component';
+import { ServerErrorComponent } from './shared/errors/server-error/server-error.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -16,5 +18,6 @@ export const routes: Routes = [
     { path: 'lists', component: ListsComponent, canActivate: [authGuard] },
     { path: 'messages', component: MessagesComponent, canActivate: [authGuard] },
     { path: 'register', component: RegisterComponent,canActivate: [registerationGuard] },
-    { path: '**', redirectTo: '/home' }
+    {path:'server-error' , component:ServerErrorComponent},
+    { path: '**', component:NotFoundComponent }
 ];

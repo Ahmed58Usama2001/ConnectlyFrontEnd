@@ -53,20 +53,16 @@
   <div class="navbar-end">
     <div class="flex items-center space-x-3" *ngIf="!isLoggedIn()">
 
-      <div class="form-control relative">
+      <div class="form-control ">
         <input type="email" placeholder="Email" class="input input-sm ..." [(ngModel)]="loginDto.email"
           [disabled]="isLoading()" />
-        <span *ngIf="errors.email" class="text-xs text-red-500 absolute -left-28 top-2 w-24">
-          {{ errors.email }}
-        </span>
+      
       </div>
 
-      <div class="form-control relative">
+      <div class="form-control ">
         <input type="password" placeholder="Password" class="input input-sm ..." [(ngModel)]="loginDto.password"
           [disabled]="isLoading()" (keyup.enter)="login()" />
-        <span *ngIf="errors.password" class="text-xs text-red-500 absolute -left-28 top-2 w-24">
-          {{ errors.password }}
-        </span>
+        
       </div>
 
       <button class="btn btn-sm ..." (click)="login()"
@@ -75,17 +71,13 @@
         <span *ngIf="isLoading()" class="loading loading-spinner loading-xs"></span>
       </button>
     </div>
-
-    <div *ngIf="errors.general" class="text-xs text-red-500 mt-2">
-      {{ errors.general }}
-    </div>
   </div>
 
 
 
   <div class="dropdown dropdown-end" *ngIf="isLoggedIn()">
     <div tabindex="0" role="button"
-      class="btn btn-ghost btn-circle avatar hover:bg-pink-100/50 transition-colors duration-200">
+      class="btn btn-ghost btn-circle avatar  hover:bg-pink-100/50 transition-colors duration-200">
       <div
         class="w-10 rounded-full bg-gradient-to-br from-pink-400 to-rose-500 flex items-center justify-center shadow-md">
         <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">

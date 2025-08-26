@@ -4,24 +4,25 @@ import { FormsModule } from '@angular/forms';
 import { AccounService } from '../../core/services/accoun.service';
 import { LoginDto } from '../../shared/models/user';
 import { Router, RouterModule } from '@angular/router';
+import { ToastService } from '../../core/services/toast.service';
 
 @Component({
   selector: 'app-nav',
   standalone: true,
-  imports: [CommonModule, FormsModule,RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './nav.component.html',
   styleUrl: './nav.component.css'
 })
-export class NavComponent  {
+export class NavComponent {
   private accountService = inject(AccounService);
   private router = inject(Router);
+  private toast = inject(ToastService)
 
   protected loginDto: LoginDto = {
     email: '',
     password: ''
   };
 
-  errors: { email?: string; password?: string; general?: string } = {};
 
 
   protected isLoading = signal(false);
@@ -32,46 +33,47 @@ export class NavComponent  {
 
   protected activeTab = signal('matches');
 
-login() {
-  if (!this.loginDto.email || !this.loginDto.password) {
-    this.errors = {
-      email: !this.loginDto.email ? 'Email is required' : undefined,
-      password: !this.loginDto.password ? 'Password is required' : undefined
-    };
-    return;
-  }
-
-  this.isLoading.set(true);
-  this.errors = {}; // clear old errors
-
-  this.accountService.login(this.loginDto).subscribe({
-    next: (user) => {
-      this.isLoading.set(false);
-      this.loginDto = { email: '', password: '' };
-      this.router.navigate(['/home']);
-    },
-    error: (error) => {
-      this.isLoading.set(false);
-
-      if (error.status === 401) {
-        this.errors.general = 'Invalid email or password.';
-      } else if (error.error?.errors) {
-        this.errors = {
-          email: error.error.errors.Email?.[0],
-          password: error.error.errors.Password?.[0],
-          general: error.error.message
-        };
-      } else {
-        this.errors.general = 'Something went wrong. Please try again.';
-      }
+  login() {
+    if (!this.loginDto.email || !this.loginDto.password) {
+      return;
     }
-  });
-}
+
+    this.isLoading.set(true);
+
+    this.accountService.login(this.loginDto).subscribe({
+      next: () => {
+        this.isLoading.set(false);
+        this.loginDto = { email: '', password: '' };
+        this.router.navigate(['/home']);
+        this.toast.Success('Logged in successfully!');
+      },
+      error: (error) => {
+        this.isLoading.set(false);
+
+        if (error.error?.errors) {
+          // Multiple validation errors (ASP.NET style)
+          for (const field in error.error.errors) {
+            if (error.error.errors.hasOwnProperty(field)) {
+              const messages: string[] = error.error.errors[field];
+              messages.forEach(msg => this.toast.Error(msg)); // show each error as toast
+            }
+          }
+        } else if (error.error?.title) {
+          // General error
+          this.toast.Error(error.error.title);
+        } else {
+          // Fallback
+          this.toast.Error("Something went wrong. Please try again.");
+        }
+
+      }
+    });
+  }
 
 
   logout() {
     this.isLoading.set(true);
-    
+
     this.accountService.logout().subscribe({
       next: () => {
 

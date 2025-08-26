@@ -1,6 +1,6 @@
 <nav class="navbar bg-gradient-to-r from-pink-50 to-rose-50 shadow-lg border-b border-pink-100">
-  <div class="navbar-start">
-    <div class="flex items-center space-x-2">
+  <div class="navbar-start ">
+    <div class="flex items-center space-x-2 cursor-pointer " (click)="navigateToHome()">
       <div
         class="w-10 h-10 bg-gradient-to-br from-pink-400 to-rose-500 rounded-full flex items-center justify-center shadow-md">
         <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -71,13 +71,14 @@
         <span *ngIf="isLoading()" class="loading loading-spinner loading-xs"></span>
       </button>
     </div>
+
   </div>
 
 
 
   <div class="dropdown dropdown-end" *ngIf="isLoggedIn()">
     <div tabindex="0" role="button"
-      class="btn btn-ghost btn-circle avatar  hover:bg-pink-100/50 transition-colors duration-200">
+      class="btn btn-ghost btn-circle avatar hover:bg-pink-100/50 transition-colors duration-200">
       <div
         class="w-10 rounded-full bg-gradient-to-br from-pink-400 to-rose-500 flex items-center justify-center shadow-md">
         <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">

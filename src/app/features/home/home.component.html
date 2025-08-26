@@ -108,12 +108,11 @@
           </div>
           <h3 class="text-2xl font-semibold text-gray-800 mb-4 text-center">Discover Matches</h3>
           <p class="text-gray-600 mb-6 text-center">Find people who share your interests and values</p>
-          <button 
+          <a routerLink="/members"
             class="btn w-full bg-gradient-to-r from-pink-400 to-rose-500 hover:from-pink-500 hover:to-rose-600 text-white border-none shadow-lg"
-            (click)="navigateToMatches()"
           >
-            Start Swiping
-          </button>
+            Find Matches
+          </a>
         </div>
 
         <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-pink-100 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
@@ -125,9 +124,9 @@
           </div>
           <h3 class="text-2xl font-semibold text-gray-800 mb-4 text-center">Your Messages</h3>
           <p class="text-gray-600 mb-6 text-center">Continue conversations with your matches</p>
-          <button class="btn w-full bg-gradient-to-r from-pink-400 to-rose-500 hover:from-pink-500 hover:to-rose-600 text-white border-none shadow-lg">
+          <a routerLink="/messages" class="btn w-full bg-gradient-to-r from-pink-400 to-rose-500 hover:from-pink-500 hover:to-rose-600 text-white border-none shadow-lg">
             View Messages
-          </button>
+          </a>
         </div>
 
         <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-pink-100 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
@@ -138,9 +137,9 @@
           </div>
           <h3 class="text-2xl font-semibold text-gray-800 mb-4 text-center">Your Profile</h3>
           <p class="text-gray-600 mb-6 text-center">Update your photos and bio to attract more matches</p>
-          <button class="btn w-full bg-gradient-to-r from-pink-400 to-rose-500 hover:from-pink-500 hover:to-rose-600 text-white border-none shadow-lg">
+          <a class="btn w-full bg-gradient-to-r from-pink-400 to-rose-500 hover:from-pink-500 hover:to-rose-600 text-white border-none shadow-lg">
             Edit Profile
-          </button>
+          </a>
         </div>
       </div>
     </div>

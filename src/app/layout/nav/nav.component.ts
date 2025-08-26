@@ -86,6 +86,10 @@ export class NavComponent {
     });
   }
 
+  navigateToHome(){
+    this.router.navigate(['/home']);
+  }
+
   editProfile() {
     console.log('Edit profile clicked');
   }

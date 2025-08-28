@@ -8,7 +8,7 @@ import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-member-detailed',
-  imports: [AsyncPipe, RouterLink, RouterLinkActive, RouterOutlet],
+  imports: [ RouterLink, RouterLinkActive, RouterOutlet],
   templateUrl: './member-detailed.component.html',
   styleUrl: './member-detailed.component.css'
 })

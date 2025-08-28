@@ -1,10 +1,11 @@
 import { Component, input, computed } from '@angular/core';
 import { Member } from '../../../shared/models/membet';
 import { DatePipe } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-member-card',
-  imports: [DatePipe],
+  imports: [DatePipe, RouterModule],
   templateUrl: './member-card.component.html',
   styleUrl: './member-card.component.css'
 })
@@ -33,13 +34,5 @@ export class MemberCardComponent {
     if (diffDays < 7) return `${diffDays} days ago`;
     if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
     return `${Math.floor(diffDays / 30)} months ago`;
-  });
-
-  genderIcon = computed(() => {
-    return this.member().gender.toLowerCase() === 'male' ? 'fas fa-mars' : 'fas fa-venus';
-  });
-
-  genderColor = computed(() => {
-    return this.member().gender.toLowerCase() === 'male' ? 'text-blue-500' : 'text-pink-500';
   });
 }

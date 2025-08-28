@@ -3,14 +3,7 @@ export interface User {
   email: string;
   userName: string;
   token: string;
-  pictureUrl?: string;
-  gender?: string;
-  dateOfBirth?: string; // You may parse it to a Date object in UI later
-  created: string;
-  lastActive: string;
-  description?: string;
-  city?: string;
-  country?: string;
+  imageUrl?: string;
 }
 
 

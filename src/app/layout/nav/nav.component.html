@@ -49,20 +49,19 @@
     </div>
   </div>
 
-
   <div class="navbar-end">
     <div class="flex items-center space-x-3" *ngIf="!isLoggedIn()">
 
       <div class="form-control ">
         <input type="email" placeholder="Email" class="input input-sm ..." [(ngModel)]="loginDto.email"
           [disabled]="isLoading()" />
-      
+
       </div>
 
       <div class="form-control ">
         <input type="password" placeholder="Password" class="input input-sm ..." [(ngModel)]="loginDto.password"
           [disabled]="isLoading()" (keyup.enter)="login()" />
-        
+
       </div>
 
       <button class="btn btn-sm ..." (click)="login()"
@@ -72,54 +71,55 @@
       </button>
     </div>
 
-  </div>
-
-
-
-  <div class="dropdown dropdown-end" *ngIf="isLoggedIn()">
-    <div tabindex="0" role="button"
-      class="btn btn-ghost btn-circle avatar hover:bg-pink-100/50 transition-colors duration-200">
-      <div
-        class="w-10 rounded-full bg-gradient-to-br from-pink-400 to-rose-500 flex items-center justify-center shadow-md">
-        <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-          <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
-        </svg>
+    <!-- Updated user avatar section -->
+    <div class="dropdown dropdown-end" *ngIf="isLoggedIn()">
+      <div tabindex="0" role="button"
+        class="btn btn-ghost btn-circle avatar hover:bg-pink-100/50 transition-colors duration-200">
+        <div class="w-10 h-10 rounded-full shadow-md overflow-hidden ring-2 ring-pink-200 bg-gray-100">
+          <img 
+            [src]="currentUser()?.imageUrl || 'https://api.dicebear.com/7.x/initials/svg?seed=' + (currentUser()?.userName || currentUser()?.email || 'User') + '&backgroundColor=FF3E76&textColor=ffffff&fontSize=40'" 
+            [alt]="(currentUser()?.userName || currentUser()?.email || 'User') + ' Avatar'"
+            class="w-full h-full object-cover"/>
+        </div>
       </div>
+      <ul tabindex="0"
+        class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-lg bg-white/95 backdrop-blur-sm rounded-box w-52 border border-pink-100">
+        <li class="menu-title text-pink-600 font-semibold">
+          <span class="flex items-center space-x-2">
+            <div class="w-8 h-8 rounded-full overflow-hidden bg-gray-100">
+              <img 
+                [src]="currentUser()?.imageUrl || 'https://api.dicebear.com/7.x/initials/svg?seed=' + (currentUser()?.userName || currentUser()?.email || 'User') + '&backgroundColor=FF3E76&textColor=ffffff&fontSize=40'" 
+                [alt]="(currentUser()?.userName || currentUser()?.email || 'User') + ' Avatar'"
+                class="w-full h-full object-cover" />
+            </div>
+            <span>{{ currentUser()?.userName || currentUser()?.email }}</span>
+          </span>
+        </li>
+        <div class="divider my-1"></div>
+        <li>
+          <button class="hover:bg-pink-50 hover:text-pink-600 transition-colors duration-200" (click)="editProfile()">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z">
+              </path>
+            </svg>
+            Edit Profile
+          </button>
+        </li>
+        <li>
+          <button class="hover:bg-red-50 hover:text-red-600 transition-colors duration-200" (click)="logout()"
+            [disabled]="isLoading()">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"
+                clip-rule="evenodd"></path>
+            </svg>
+            <span *ngIf="!isLoading()">Logout</span>
+            <span *ngIf="isLoading()" class="loading loading-spinner loading-xs"></span>
+          </button>
+        </li>
+      </ul>
     </div>
-    <ul tabindex="0"
-      class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-lg bg-white/95 backdrop-blur-sm rounded-box w-52 border border-pink-100">
-      <li class="menu-title text-pink-600 font-semibold">
-        <span class="flex items-center space-x-2">
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd">
-            </path>
-          </svg>
-          <span>{{ currentUser()?.userName || currentUser()?.email }}</span>
-        </span>
-      </li>
-      <div class="divider my-1"></div>
-      <li>
-        <button class="hover:bg-pink-50 hover:text-pink-600 transition-colors duration-200" (click)="editProfile()">
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-            <path
-              d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z">
-            </path>
-          </svg>
-          Edit Profile
-        </button>
-      </li>
-      <li>
-        <button class="hover:bg-red-50 hover:text-red-600 transition-colors duration-200" (click)="logout()"
-          [disabled]="isLoading()">
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd"
-              d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"
-              clip-rule="evenodd"></path>
-          </svg>
-          <span *ngIf="!isLoading()">Logout</span>
-          <span *ngIf="isLoading()" class="loading loading-spinner loading-xs"></span>
-        </button>
-      </li>
-    </ul>
   </div>
+
 </nav>

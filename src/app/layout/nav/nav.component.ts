@@ -51,18 +51,15 @@ export class NavComponent {
         this.isLoading.set(false);
 
         if (error.error?.errors) {
-          // Multiple validation errors (ASP.NET style)
           for (const field in error.error.errors) {
             if (error.error.errors.hasOwnProperty(field)) {
               const messages: string[] = error.error.errors[field];
-              messages.forEach(msg => this.toast.Error(msg)); // show each error as toast
+              messages.forEach(msg => this.toast.Error(msg)); 
             }
           }
         } else if (error.error?.title) {
-          // General error
           this.toast.Error(error.error.title);
         } else {
-          // Fallback
           this.toast.Error("Something went wrong. Please try again.");
         }
 

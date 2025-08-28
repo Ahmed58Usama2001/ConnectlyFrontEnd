@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { MemberService } from '../../../core/services/member.service';
 import { AsyncPipe, DatePipe } from '@angular/common';
@@ -17,17 +17,15 @@ export class MemberDetailedComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private location = inject(Location);
-  
-  protected member$?: Observable<Member>;
+
+  protected member = signal<Member | undefined>(undefined);
 
   ngOnInit(): void {
-    this.member$ = this.loadMember();
-  }
-
-  loadMember() {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (!id) return;
-    return this.memberService.getMember(id);
+    this.route.data.subscribe({
+      next: (data) => {
+        this.member.set(data['member']);
+      }
+    });
   }
 
   getAge(dateOfBirth: string): number {
@@ -35,11 +33,11 @@ export class MemberDetailedComponent implements OnInit {
     const birthDate = new Date(dateOfBirth);
     let age = today.getFullYear() - birthDate.getFullYear();
     const monthDiff = today.getMonth() - birthDate.getMonth();
-    
+
     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
       age--;
     }
-    
+
     return age;
   }
 

@@ -12,12 +12,13 @@ import { ServerErrorComponent } from './shared/errors/server-error/server-error.
 import { MemberProfileComponent } from './features/members/member-profile/member-profile.component';
 import { MemberPhotosComponent } from './features/members/member-photos/member-photos.component';
 import { MemberMessagesComponent } from './features/members/member-messages/member-messages.component';
+import { memberResolver } from './features/members/member-resolver.resolver';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
     { path: 'home', component: HomeComponent },
     { path: 'members', component: MemberListComponent, canActivate: [authGuard] },
-    { path: 'members/:id', component: MemberDetailedComponent, canActivate: [authGuard],
+    { path: 'members/:id',resolve:{member:memberResolver} ,runGuardsAndResolvers:'always' ,component: MemberDetailedComponent, canActivate: [authGuard],
         children: [
             {path: '', redirectTo: 'profile', pathMatch: 'full'},
             {path: 'profile', component: MemberProfileComponent , title: 'Profile'},

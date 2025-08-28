@@ -25,7 +25,7 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) =>{
     catchError((error: HttpErrorResponse) => {
       if (error.status === 401) {
         accountService.logout().subscribe();
-        router.navigate(['/login']);
+        router.navigate(['/home']);
       }
       
       return throwError(() => error);

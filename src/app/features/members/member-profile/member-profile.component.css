@@ -1,4 +1,3 @@
-/* member-profile.component.css */
 
 .info-item {
   @apply bg-white rounded-lg p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300;
@@ -12,7 +11,6 @@
   @apply text-base font-semibold text-gray-800;
 }
 
-/* Custom animations */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -28,13 +26,11 @@
   animation: fadeInUp 0.6s ease-out;
 }
 
-/* Staggered animation delay for info items */
 .info-item:nth-child(1) { animation-delay: 0.1s; }
 .info-item:nth-child(2) { animation-delay: 0.2s; }
 .info-item:nth-child(3) { animation-delay: 0.3s; }
 .info-item:nth-child(4) { animation-delay: 0.4s; }
 
-/* Hover effects for sections */
 .bg-gradient-to-r {
   transition: all 0.3s ease;
 }
@@ -58,7 +54,6 @@
   border-radius: 2px;
 }
 
-/* Responsive text scaling */
 @media (max-width: 768px) {
   .info-value {
     @apply text-sm;
@@ -69,7 +64,6 @@
   }
 }
 
-/* Icon hover effects */
 .fas {
   transition: transform 0.3s ease;
 }

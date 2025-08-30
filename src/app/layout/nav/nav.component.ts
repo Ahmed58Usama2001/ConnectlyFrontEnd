@@ -5,6 +5,7 @@ import { AccounService } from '../../core/services/accoun.service';
 import { LoginDto } from '../../shared/models/user';
 import { Router, RouterModule } from '@angular/router';
 import { ToastService } from '../../core/services/toast.service';
+import { themes } from './theme';
 
 @Component({
   selector: 'app-nav',
@@ -13,17 +14,18 @@ import { ToastService } from '../../core/services/toast.service';
   templateUrl: './nav.component.html',
   styleUrl: './nav.component.css'
 })
-export class NavComponent {
+export class NavComponent implements OnInit {
+ 
   private accountService = inject(AccounService);
   private router = inject(Router);
   private toast = inject(ToastService)
+  protected selectedTheme = signal<string>(localStorage.getItem('theme') || 'light');
+  protected themes = themes
 
   protected loginDto: LoginDto = {
     email: '',
     password: ''
   };
-
-
 
   protected isLoading = signal(false);
   protected showLoginForm = signal(true);
@@ -32,6 +34,17 @@ export class NavComponent {
   protected isLoggedIn = computed(() => !!this.currentUser());
 
   protected activeTab = signal('matches');
+
+
+  ngOnInit(): void {
+    document.documentElement.setAttribute('data-theme',this.selectedTheme());
+  }
+  
+  handleSelectTheme(theme: string) {
+    this.selectedTheme.set(theme);
+    localStorage.setItem('theme', theme);
+    document.documentElement.setAttribute('data-theme',theme)
+  }
 
   login() {
     if (!this.loginDto.email || !this.loginDto.password) {
@@ -82,6 +95,7 @@ export class NavComponent {
       }
     });
   }
+
 
   navigateToHome(){
     this.router.navigate(['/home']);

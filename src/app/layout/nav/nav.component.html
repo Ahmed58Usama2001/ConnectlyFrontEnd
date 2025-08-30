@@ -115,7 +115,7 @@
           </span>
         </li>
         <div class="divider my-1"></div>
-        <li>
+        <li routerLink="/members/{{currentUser()?.id}}">
           <button class="hover:bg-pink-50 hover:text-pink-600 transition-colors duration-200" (click)="editProfile()">
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
               <path

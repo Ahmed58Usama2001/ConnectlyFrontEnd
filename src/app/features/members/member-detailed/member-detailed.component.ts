@@ -1,24 +1,28 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { MemberService } from '../../../core/services/member.service';
-import { AsyncPipe, DatePipe } from '@angular/common';
-import { Observable } from 'rxjs';
+import { Component, computed, inject, OnInit, signal, effect } from '@angular/core';
+import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { Member } from '../../../shared/models/membet';
 import { Location } from '@angular/common';
+import { AccounService } from '../../../core/services/accoun.service';
+import { AgeCalculatorPipe } from '../../../shared/pipes/age-calculator.pipe';
+import { MemberService } from '../../../core/services/member.service';
 
 @Component({
   selector: 'app-member-detailed',
-  imports: [ RouterLink, RouterLinkActive, RouterOutlet],
+  imports: [ RouterLink, RouterLinkActive, RouterOutlet, AgeCalculatorPipe],
   templateUrl: './member-detailed.component.html',
   styleUrl: './member-detailed.component.css'
 })
 export class MemberDetailedComponent implements OnInit {
-  private memberService = inject(MemberService);
   private route = inject(ActivatedRoute);
-  private router = inject(Router);
+  private accountService = inject(AccounService);
   private location = inject(Location);
+  
+  protected isCurreentUser = computed(() => {
+    return this.accountService.currentUser()?.id === this.route.snapshot.paramMap.get('id');
+  });
 
   protected member = signal<Member | undefined>(undefined);
+
 
   ngOnInit(): void {
     this.route.data.subscribe({
@@ -40,8 +44,6 @@ export class MemberDetailedComponent implements OnInit {
 
     return age;
   }
-
-
 
   likeUser(): void {
     // TODO: Implement like functionality

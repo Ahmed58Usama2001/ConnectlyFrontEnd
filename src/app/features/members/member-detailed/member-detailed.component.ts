@@ -1,10 +1,8 @@
-import { Component, computed, inject, OnInit, signal, effect } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { Member } from '../../../shared/models/membet';
 import { Location } from '@angular/common';
-import { AccounService } from '../../../core/services/accoun.service';
 import { AgeCalculatorPipe } from '../../../shared/pipes/age-calculator.pipe';
-import { MemberService } from '../../../core/services/member.service';
 
 @Component({
   selector: 'app-member-detailed',
@@ -14,13 +12,8 @@ import { MemberService } from '../../../core/services/member.service';
 })
 export class MemberDetailedComponent implements OnInit {
   private route = inject(ActivatedRoute);
-  private accountService = inject(AccounService);
   private location = inject(Location);
   
-  protected isCurreentUser = computed(() => {
-    return this.accountService.currentUser()?.id === this.route.snapshot.paramMap.get('id');
-  });
-
   protected member = signal<Member | undefined>(undefined);
 
 

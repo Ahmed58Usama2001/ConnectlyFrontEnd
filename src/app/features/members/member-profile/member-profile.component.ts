@@ -1,6 +1,6 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnDestroy, OnInit, signal, ViewChild, viewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Member } from '../../../shared/models/membet';
+import { EditableMember, Member } from '../../../shared/models/membet';
 import { CommonModule, DatePipe, SlicePipe } from '@angular/common';
 import { AgeCalculatorPipe } from '../../../shared/pipes/age-calculator.pipe';
 import { TimeAgoPipe } from '../../../shared/pipes/time-ago.pipe';
@@ -8,28 +8,39 @@ import { PlatformDaysPipe } from '../../../shared/pipes/platform-days.pipe';
 import { ActivityStatusPipe } from '../../../shared/pipes/activity-status.pipe';
 import { AccounService } from '../../../core/services/accoun.service';
 import { MemberService } from '../../../core/services/member.service';
+import { FormsModule, NgForm } from '@angular/forms';
+import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
   selector: 'app-member-profile',
   imports: [
-    CommonModule, 
-    DatePipe, 
-    SlicePipe, 
-    AgeCalculatorPipe, 
-    TimeAgoPipe, 
-    PlatformDaysPipe, 
-    ActivityStatusPipe
+    CommonModule,
+    DatePipe,
+    SlicePipe,
+    AgeCalculatorPipe,
+    TimeAgoPipe,
+    PlatformDaysPipe,
+    ActivityStatusPipe,
+    FormsModule
   ],
   templateUrl: './member-profile.component.html',
   styleUrl: './member-profile.component.css'
 })
-export class MemberProfileComponent implements OnInit {
+export class MemberProfileComponent implements OnInit, OnDestroy {
+  @ViewChild('editForm') editForm?: NgForm;
   private route = inject(ActivatedRoute);
   private accountService = inject(AccounService);
-    protected memberService = inject(MemberService);
+  private toast = inject(ToastService)
+  protected memberService = inject(MemberService);
   protected member = signal<Member | undefined>(undefined);
-  
-    protected isCurrentUser = computed(() => {
+  protected editableMember: EditableMember = {
+    userName: '',
+    description: '',
+    city: '',
+    country: ''
+  };
+
+  protected isCurrentUser = computed(() => {
     return this.accountService.currentUser()?.id === this.route.parent?.snapshot.paramMap.get('id')?.toLowerCase();
   });
 
@@ -40,9 +51,26 @@ export class MemberProfileComponent implements OnInit {
       }
     });
 
-    console.log(this.accountService.currentUser()?.id 
-      + ' === ' + this.route.parent?.snapshot.paramMap.get('id')?.toLowerCase());
-    
+    this.editableMember = {
+      userName: this.member()?.userName || '',
+      description: this.member()?.description || '',
+      city: this.member()?.city || '',
+      country: this.member()?.country || ''
+    };
+  }
+
+  ngOnDestroy(): void {
+    this.memberService.editMode.set(false);
+  }
+
+
+  updateProfile() {
+    if (!this.member()) return;
+    const updatedMember = {
+      ...this.member(), ...this.editableMember
+    };
+    this.toast.Success('Profile updated successfully');
+    this.memberService.editMode.set(false);
   }
 
   onEditProfile(): void {

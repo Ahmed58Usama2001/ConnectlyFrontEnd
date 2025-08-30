@@ -14,6 +14,36 @@
     }
   </div>
 
+  @if (memberService.editMode()) {
+  <form #editForm="ngForm" (ngSubmit)="updateProfile()" class="flex flex-col w-full gap-4">
+    <label class="floating-label">
+      <span>Username</span>
+      <input type="text" name="userName" [(ngModel)]="editableMember.userName" class="input w-full floating-input"
+        placeholder="username" />
+    </label>
+    <label class="floating-label">
+      <span>Description</span>
+      <input type="text" name="description" [(ngModel)]="editableMember.description" class="input w-full floating-input"
+        placeholder="description" />
+    </label>
+    <label class="floating-label">
+      <span>City</span>
+      <input type="text" name="city" [(ngModel)]="editableMember.city" class="input w-full floating-input"
+        placeholder="city" />
+    </label>
+    <label class="floating-label">
+      <span>Country</span>
+      <input type="text" name="country" [(ngModel)]="editableMember.country" class="input w-full floating-input"
+        placeholder="country" />
+    </label>
+    <div class="flex self-end">
+      <button type="submit" class="btn btn-success">
+        Save Changes
+      </button>
+    </div>
+  </form>
+  }
+  @else {
   <div *ngIf="member() as memberData" class="space-y-6">
 
     <div class="bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl p-6 border-l-4"
@@ -148,4 +178,6 @@
       <p class="text-xl text-gray-500">Profile data not available</p>
     </div>
   </div>
+  }
+
 </div>

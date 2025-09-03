@@ -44,7 +44,7 @@
   </form>
   }
   @else {
-  <div *ngIf="member() as memberData" class="space-y-6">
+  <div *ngIf="memberService.member() as memberData" class="space-y-6">
 
     <div class="bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl p-6 border-l-4"
       style="border-left-color: rgb(252, 60, 114);">
@@ -164,7 +164,7 @@
 
   </div>
 
-  <div *ngIf="!member()" class="flex items-center justify-center h-64">
+  <div *ngIf="!memberService.member()" class="flex items-center justify-center h-64">
     <div class="text-center">
       <div class="animate-spin rounded-full h-12 w-12 border-t-4 mx-auto mb-4"
         style="border-top-color: rgb(252, 60, 114);"></div>
@@ -172,7 +172,7 @@
     </div>
   </div>
 
-  <div *ngIf="member() === undefined" class="flex items-center justify-center h-64">
+  <div *ngIf="memberService.member()" class="flex items-center justify-center h-64">
     <div class="text-center">
       <i class="fas fa-user-slash text-6xl text-gray-300 mb-4"></i>
       <p class="text-xl text-gray-500">Profile data not available</p>

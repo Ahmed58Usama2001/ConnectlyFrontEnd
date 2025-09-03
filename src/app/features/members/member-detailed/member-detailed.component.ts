@@ -3,6 +3,7 @@ import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from '@ang
 import { Member } from '../../../shared/models/membet';
 import { Location } from '@angular/common';
 import { AgeCalculatorPipe } from '../../../shared/pipes/age-calculator.pipe';
+import { MemberService } from '../../../core/services/member.service';
 
 @Component({
   selector: 'app-member-detailed',
@@ -11,18 +12,13 @@ import { AgeCalculatorPipe } from '../../../shared/pipes/age-calculator.pipe';
   styleUrl: './member-detailed.component.css'
 })
 export class MemberDetailedComponent implements OnInit {
-  private route = inject(ActivatedRoute);
   private location = inject(Location);
+  protected memberService = inject(MemberService);  
   
-  protected member = signal<Member | undefined>(undefined);
 
 
   ngOnInit(): void {
-    this.route.data.subscribe({
-      next: (data) => {
-        this.member.set(data['member']);
-      }
-    });
+    
   }
 
   getAge(dateOfBirth: string): number {

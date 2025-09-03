@@ -32,11 +32,9 @@ export class MemberProfileComponent implements OnInit, OnDestroy {
     if (this.editForm?.dirty)
       $event.preventDefault();
   }
-  private route = inject(ActivatedRoute);
   private accountService = inject(AccounService);
   private toast = inject(ToastService)
   protected memberService = inject(MemberService);
-  protected member = signal<Member | undefined>(undefined);
   protected editableMember: EditableMember = {
     userName: '',
     description: '',
@@ -45,21 +43,17 @@ export class MemberProfileComponent implements OnInit, OnDestroy {
   };
 
   protected isCurrentUser = computed(() => {
-    return this.accountService.currentUser()?.id === this.route.parent?.snapshot.paramMap.get('id')?.toLowerCase();
+    return this.accountService.currentUser()?.id === this.memberService.member()?.id.toLocaleLowerCase();
   });
 
   ngOnInit(): void {
-    this.route.parent?.data.subscribe({
-      next: (data) => {
-        this.member.set(data['member']);
-      }
-    });
+   
 
     this.editableMember = {
-      userName: this.member()?.userName || '',
-      description: this.member()?.description || '',
-      city: this.member()?.city || '',
-      country: this.member()?.country || ''
+      userName: this.memberService.member()?.userName || '',
+      description: this.memberService.member()?.description || '',
+      city: this.memberService.member()?.city || '',
+      country: this.memberService.member()?.country || ''
     };
   }
 
@@ -69,14 +63,15 @@ export class MemberProfileComponent implements OnInit, OnDestroy {
 
 
   updateProfile() {
-    if (!this.member()) return;
+    if (!this.memberService.member()) return;
     const updatedMember = {
-      ...this.member(), ...this.editableMember
+      ...this.memberService.member(), ...this.editableMember
     };
     this.memberService.updateMember(this.editableMember).subscribe({
       next: () => {
         this.toast.Success('Profile updated successfully');
         this.memberService.editMode.set(false);
+        this.memberService.member.set(updatedMember as Member);
         this.editForm?.reset(updatedMember);
       }
     })

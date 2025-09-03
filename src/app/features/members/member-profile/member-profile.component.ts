@@ -29,7 +29,7 @@ import { ToastService } from '../../../core/services/toast.service';
 export class MemberProfileComponent implements OnInit, OnDestroy {
   @ViewChild('editForm') editForm?: NgForm;
   @HostListener('window:beforeunload', ['$event']) notify($event: BeforeUnloadEvent) {
-    if (this.editForm?.dirty) 
+    if (this.editForm?.dirty)
       $event.preventDefault();
   }
   private route = inject(ActivatedRoute);
@@ -73,9 +73,17 @@ export class MemberProfileComponent implements OnInit, OnDestroy {
     const updatedMember = {
       ...this.member(), ...this.editableMember
     };
-    this.toast.Success('Profile updated successfully');
-    this.memberService.editMode.set(false);
+    this.memberService.updateMember(this.editableMember).subscribe({
+      next: () => {
+        this.toast.Success('Profile updated successfully');
+        this.memberService.editMode.set(false);
+        this.editForm?.reset(updatedMember);
+      }
+    })
   }
+
+
+
 
   onEditProfile(): void {
     // TODO: Implement edit functionality

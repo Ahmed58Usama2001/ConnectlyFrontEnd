@@ -6,6 +6,7 @@ import { LoginDto } from '../../shared/models/user';
 import { Router, RouterModule } from '@angular/router';
 import { ToastService } from '../../core/services/toast.service';
 import { themes } from './theme';
+import { BusyService } from '../../core/services/busy.service';
 
 @Component({
   selector: 'app-nav',
@@ -19,6 +20,7 @@ export class NavComponent implements OnInit {
   private accountService = inject(AccounService);
   private router = inject(Router);
   private toast = inject(ToastService)
+  protected busyService = inject(BusyService)
   protected selectedTheme = signal<string>(localStorage.getItem('theme') || 'light');
   protected themes = themes
 
@@ -29,7 +31,6 @@ export class NavComponent implements OnInit {
 
   protected isLoading = signal(false);
   protected showLoginForm = signal(true);
-
   protected currentUser = computed(() => this.accountService.currentUser());
   protected isLoggedIn = computed(() => !!this.currentUser());
 

@@ -49,7 +49,7 @@ export class AccounService {
     return userJson ? JSON.parse(userJson) : null;
   }
 
-  private setUser(user: User | null) {
+  setUser(user: User | null) {
     if (user) {
       localStorage.setItem('user', JSON.stringify(user));
     } else {

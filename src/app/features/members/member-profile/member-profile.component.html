@@ -37,7 +37,7 @@
         placeholder="country" />
     </label>
     <div class="flex self-end">
-      <button type="submit" class="btn btn-success">
+      <button [disabled]="!editForm.dirty" type="submit" class="btn btn-success">
         Save Changes
       </button>
     </div>

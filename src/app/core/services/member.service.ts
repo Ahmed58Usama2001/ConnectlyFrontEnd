@@ -8,7 +8,7 @@ import { tap } from 'rxjs';
   providedIn: 'root'
 })
 export class MemberService {
-  private baseUrl = environment.apiUrl; // e.g. "https://localhost:5001/api/"
+  private baseUrl = environment.apiUrl; 
   private http = inject(HttpClient);
   editMode = signal(false);
   member = signal<Member | null>(null);
@@ -29,6 +29,12 @@ export class MemberService {
 
   updateMember(member: EditableMember) {
     return this.http.put(`${this.baseUrl}account`, member);
+  }
+
+  uploadPhoto(file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<Photo>(`${this.baseUrl}account/add-photo`, formData);
   }
 
 }

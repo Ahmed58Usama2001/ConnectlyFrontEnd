@@ -4,10 +4,11 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Photo } from '../../../shared/models/membet';
 import { AsyncPipe } from '@angular/common';
+import { ImageUploadComponent } from "../../../shared/image-upload/image-upload.component";
 
 @Component({
   selector: 'app-member-photos',
-  imports: [AsyncPipe],
+  imports: [AsyncPipe, ImageUploadComponent],
   templateUrl: './member-photos.component.html',
   styleUrl: './member-photos.component.css'
 })

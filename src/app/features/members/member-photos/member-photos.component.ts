@@ -12,11 +12,11 @@ import { AsyncPipe } from '@angular/common';
   styleUrl: './member-photos.component.css'
 })
 export class MemberPhotosComponent {
-  private memberService = inject(MemberService);
+  protected memberService = inject(MemberService);
   private route = inject(ActivatedRoute);
   protected photos$? : Observable<Photo[]>;
 
-  constructor() {
+  constructor() {    
     const memberId = this.route.parent?.snapshot.paramMap.get('id')!;
 
     if(memberId)

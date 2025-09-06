@@ -1,47 +1,45 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { Member } from '../../../shared/models/membet';
-import { Location } from '@angular/common';
-import { AgeCalculatorPipe } from '../../../shared/pipes/age-calculator.pipe';
+import { Component, computed, inject, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router, RouterModule, RouterOutlet } from '@angular/router';
+import { AccounService } from '../../../core/services/accoun.service';
 import { MemberService } from '../../../core/services/member.service';
+import { AgeCalculatorPipe } from '../../../shared/pipes/age-calculator.pipe';
+
 
 @Component({
   selector: 'app-member-detailed',
-  imports: [ RouterLink, RouterLinkActive, RouterOutlet, AgeCalculatorPipe],
+  imports: [RouterOutlet, AgeCalculatorPipe,RouterModule],
   templateUrl: './member-detailed.component.html',
   styleUrl: './member-detailed.component.css'
 })
-export class MemberDetailedComponent implements OnInit {
-  private location = inject(Location);
-  protected memberService = inject(MemberService);  
-  
+export class MemberDetailedComponent implements OnDestroy {
+  protected memberService = inject(MemberService);
+  private accountService = inject(AccounService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
+  protected isCurrentUser = computed(() => {
+    return this.accountService.currentUser()?.id === this.memberService.member()?.id.toLocaleLowerCase();
+  });
 
-  ngOnInit(): void {
-    
+  constructor() {
+    const memberId = this.route.snapshot.paramMap.get('id')!;
+    this.memberService.getMember(memberId);
   }
 
-  getAge(dateOfBirth: string): number {
-    const today = new Date();
-    const birthDate = new Date(dateOfBirth);
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const monthDiff = today.getMonth() - birthDate.getMonth();
-
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
-
-    return age;
+  ngOnDestroy(): void {
+    this.memberService.editMode.set(false);
   }
 
-  likeUser(): void {
+  likeUser() {
     // TODO: Implement like functionality
-    console.log('User liked!');
-    // You can call your member service to like the user
-    // this.memberService.likeUser(memberId).subscribe(...);
+    console.log('Like user clicked');
   }
 
-  goBack(): void {
-    this.location.back();
+  goBack() {
+    this.router.navigateByUrl('/members');
+  }
+
+  toggleEditMode() {
+    this.memberService.editMode.set(!this.memberService.editMode());
   }
 }

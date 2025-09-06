@@ -1,5 +1,4 @@
-import { Component, computed, HostListener, inject, OnDestroy, OnInit, signal, ViewChild, viewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, HostListener, inject, OnInit, ViewChild } from '@angular/core';
 import { EditableMember, Member } from '../../../shared/models/membet';
 import { CommonModule, DatePipe, SlicePipe } from '@angular/common';
 import { AgeCalculatorPipe } from '../../../shared/pipes/age-calculator.pipe';
@@ -26,7 +25,7 @@ import { ToastService } from '../../../core/services/toast.service';
   templateUrl: './member-profile.component.html',
   styleUrl: './member-profile.component.css'
 })
-export class MemberProfileComponent implements OnInit, OnDestroy {
+export class MemberProfileComponent implements OnInit {
   @ViewChild('editForm') editForm?: NgForm;
   @HostListener('window:beforeunload', ['$event']) notify($event: BeforeUnloadEvent) {
     if (this.editForm?.dirty)
@@ -42,13 +41,7 @@ export class MemberProfileComponent implements OnInit, OnDestroy {
     country: ''
   };
 
-  protected isCurrentUser = computed(() => {
-    return this.accountService.currentUser()?.id === this.memberService.member()?.id.toLocaleLowerCase();
-  });
-
   ngOnInit(): void {
-   
-
     this.editableMember = {
       userName: this.memberService.member()?.userName || '',
       description: this.memberService.member()?.description || '',
@@ -56,11 +49,6 @@ export class MemberProfileComponent implements OnInit, OnDestroy {
       country: this.memberService.member()?.country || ''
     };
   }
-
-  ngOnDestroy(): void {
-    this.memberService.editMode.set(false);
-  }
-
 
   updateProfile() {
     if (!this.memberService.member()) return;
@@ -80,13 +68,5 @@ export class MemberProfileComponent implements OnInit, OnDestroy {
         this.editForm?.reset(updatedMember);
       }
     })
-  }
-
-
-
-
-  onEditProfile(): void {
-    // TODO: Implement edit functionality
-    console.log('Edit profile clicked!');
   }
 }

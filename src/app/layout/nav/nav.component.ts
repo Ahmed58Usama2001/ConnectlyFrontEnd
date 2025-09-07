@@ -102,9 +102,6 @@ export class NavComponent implements OnInit {
     this.router.navigate(['/home']);
   }
 
-  editProfile() {
-    console.log('Edit profile clicked');
-  }
 
   setActiveTab(tab: string) {
     this.activeTab.set(tab);

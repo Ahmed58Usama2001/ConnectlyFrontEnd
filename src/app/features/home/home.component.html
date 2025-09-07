@@ -137,7 +137,7 @@
           </div>
           <h3 class="text-2xl font-semibold text-gray-800 mb-4 text-center">Your Profile</h3>
           <p class="text-gray-600 mb-6 text-center">Update your photos and bio to attract more matches</p>
-          <a class="btn w-full bg-gradient-to-r from-pink-400 to-rose-500 hover:from-pink-500 hover:to-rose-600 text-white border-none shadow-lg">
+          <a routerLink="/members/{{currentUser()?.id}}" class="btn w-full bg-gradient-to-r from-pink-400 to-rose-500 hover:from-pink-500 hover:to-rose-600 text-white border-none shadow-lg">
             Edit Profile
           </a>
         </div>

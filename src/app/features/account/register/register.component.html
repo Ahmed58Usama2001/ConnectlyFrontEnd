@@ -20,7 +20,12 @@
 
       <!-- Registration Form -->
       <div class="bg-white backdrop-blur-sm rounded-3xl shadow-2xl border border-pink-100 p-8">
-        <form [formGroup]="registerForm" (ngSubmit)="register()">
+        <ul class="steps w-full ">
+          <li class="step step-primary">Credentials</li>
+          <li [class.step-primary]="currentStep() === 2" class="step">Profile</li>
+        </ul>
+        @if (currentStep()==1) {
+        <form [formGroup]="credintialsForm" class="flex flex-col w-full gap-4 steps">
           <!-- Email Field -->
           <div class="form-control mb-6">
             <label class="label">
@@ -29,8 +34,7 @@
             <input type="email" placeholder="Enter your email"
               class="input input-lg bg-white border-pink-200 focus:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-200 transition-all duration-200 w-full text-gray-800"
               formControlName="email" [disabled]="isLoading()" required
-              [class.border-red-300]="email?.touched && email?.invalid"
-              [class.border-green-300]="email?.valid" />
+              [class.border-red-300]="email?.touched && email?.invalid" [class.border-green-300]="email?.valid" />
             <label class="label" *ngIf="email?.touched && email?.invalid">
               <span class="label-text-alt text-red-500">Please enter a valid email address</span>
             </label>
@@ -47,10 +51,8 @@
               [class.border-red-300]="userName?.touched && userName?.invalid"
               [class.border-green-300]="userName?.valid" />
             <label class="label">
-              <span class="label-text-alt"
-                [class.text-red-500]="userName?.touched && userName?.invalid"
-                [class.text-green-500]="userName?.valid"
-                [class.text-gray-500]="!userName?.touched">
+              <span class="label-text-alt" [class.text-red-500]="userName?.touched && userName?.invalid"
+                [class.text-green-500]="userName?.valid" [class.text-gray-500]="!userName?.touched">
                 Username must be 3-20 characters long
               </span>
             </label>
@@ -90,8 +92,7 @@
             <!-- Password Requirements -->
             <div class="mt-3 space-y-1" *ngIf="password?.value?.length! > 0">
               <div class="flex items-center space-x-2" *ngFor="let req of passwordRequirements">
-                <svg class="w-4 h-4"
-                  [class.text-green-500]="req.check(password?.value!)"
+                <svg class="w-4 h-4" [class.text-green-500]="req.check(password?.value!)"
                   [class.text-red-400]="!req.check(password?.value!)" fill="currentColor" viewBox="0 0 20 20">
                   <path *ngIf="req.check(password?.value!)" fill-rule="evenodd"
                     d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
@@ -100,8 +101,7 @@
                     d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
                     clip-rule="evenodd"></path>
                 </svg>
-                <span class="text-sm"
-                  [class.text-green-600]="req.check(password?.value!)"
+                <span class="text-sm" [class.text-green-600]="req.check(password?.value!)"
                   [class.text-red-500]="!req.check(password?.value!)">
                   {{ req.label }}
                 </span>
@@ -137,16 +137,52 @@
               Cancel
             </button>
 
-            <button type="submit"
+            <button type="button" (click)="nextStep()"
               class="btn btn-lg flex-1 bg-gradient-to-r from-pink-500 to-rose-600 hover:from-pink-600 hover:to-rose-700 text-white border-none shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
-              [disabled]="isLoading() || registerForm.invalid" [class.opacity-50]="registerForm.invalid">
+              [disabled]="isLoading() || credintialsForm.invalid" [class.opacity-50]="credintialsForm.invalid">
+              <span *ngIf="!isLoading()" class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m15 15 6-6m0 0-6-6m6 6H9a6 6 0 0 0 0 12h3" />
+                </svg>
+
+                Next
+              </span>
+              <span *ngIf="isLoading()" class="flex items-center">
+                <span class="loading loading-spinner loading-sm mr-2"></span>
+                Next Step...
+              </span>
+            </button>
+          </div>
+        </form>
+        }
+        @if (currentStep()==2) {
+        <form [formGroup]="profileForm" class="flex flex-col w-full gap-4 steps">
+          <div>
+            Profile Form goes here
+          </div>
+          <div class="flex flex-col sm:flex-row gap-4 mt-8">
+            <button type="button"
+              class="btn btn-lg flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 border-none transition-all duration-200"
+              (click)="prevStep()" [disabled]="isLoading()">
+              <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  clip-rule="evenodd"></path>
+              </svg>
+              Back
+            </button>
+
+            <button type="button" (click)="register()"
+              class="btn btn-lg flex-1 bg-gradient-to-r from-pink-500 to-rose-600 hover:from-pink-600 hover:to-rose-700 text-white border-none shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+              [disabled]="isLoading() || profileForm.invalid" [class.opacity-50]="profileForm.invalid">
               <span *ngIf="!isLoading()" class="flex items-center">
                 <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd"
                     d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
                     clip-rule="evenodd"></path>
                 </svg>
-                Create Account
+                register
               </span>
               <span *ngIf="isLoading()" class="flex items-center">
                 <span class="loading loading-spinner loading-sm mr-2"></span>
@@ -155,6 +191,7 @@
             </button>
           </div>
         </form>
+        }
       </div>
     </div>
   </div>

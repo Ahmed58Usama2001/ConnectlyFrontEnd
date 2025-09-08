@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators, AbstractControl, ValidationErrors, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AccounService } from '../../../core/services/accoun.service';
 import { RegisterDto } from '../../../shared/models/user';
@@ -19,9 +19,20 @@ export class RegisterComponent {
 
   protected isLoading = signal(false);
   protected showPassword = signal(false);
+  protected currentStep = signal(1);
+  protected profileForm:FormGroup; 
+
+  constructor() {
+    this.profileForm = this.fb.group({
+      gender: ['', Validators.required],
+      dateOfBirth: ['', Validators.required],
+      city: ['', Validators.required],
+      country: ['', Validators.required],
+  })
+}
 
   // Reactive Form
-  registerForm = this.fb.group(
+  credintialsForm = this.fb.group(
     {
       email: ['', [Validators.required, Validators.email]],
       userName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]],
@@ -55,6 +66,16 @@ export class RegisterComponent {
     return password === confirmPassword ? null : { mismatch: true };
   }
 
+  nextStep() {
+    if (this.credintialsForm.valid) 
+      this.currentStep.update(prevStep=> prevStep + 1);
+  }
+
+  prevStep() {
+    if (this.credintialsForm.valid) 
+      this.currentStep.update(prevStep=> prevStep - 1);
+  }
+
   // Password requirements for UI
   passwordRequirements = [
     { label: 'One uppercase letter', check: (val: string) => /[A-Z]/.test(val) },
@@ -64,36 +85,45 @@ export class RegisterComponent {
   ];
 
   // Getters for easy template access
-  get email() { return this.registerForm.get('email'); }
-  get userName() { return this.registerForm.get('userName'); }
-  get password() { return this.registerForm.get('password'); }
-  get confirmPassword() { return this.registerForm.get('confirmPassword'); }
+  get email() { return this.credintialsForm.get('email'); }
+  get userName() { return this.credintialsForm.get('userName'); }
+  get password() { return this.credintialsForm.get('password'); }
+  get confirmPassword() { return this.credintialsForm.get('confirmPassword'); }
+
+  // register() {
+  //   if (this.credintialsForm.invalid) {
+  //     this.credintialsForm.markAllAsTouched();
+  //     return;
+  //   }
+
+  //   this.isLoading.set(true);
+
+  //   const dto: RegisterDto = {
+  //     email: this.email?.value!,
+  //     userName: this.userName?.value!,
+  //     password: this.password?.value!,
+  //     confirmPassword: this.confirmPassword?.value!
+  //   };
+
+  //   this.accountService.register(dto).subscribe({
+  //     next: () => {
+  //       this.isLoading.set(false);
+  //       this.router.navigate(['/home']);
+  //     },
+  //     error: (error) => {
+  //       console.error('Registration failed:', error);
+  //       this.isLoading.set(false);
+  //     }
+  //   });
+  // }
 
   register() {
-    if (this.registerForm.invalid) {
-      this.registerForm.markAllAsTouched();
-      return;
+    if (this.credintialsForm.valid || this.profileForm.valid) {
+      const formData={...this.credintialsForm.value,...this.profileForm.value};
     }
+    
 
-    this.isLoading.set(true);
 
-    const dto: RegisterDto = {
-      email: this.email?.value!,
-      userName: this.userName?.value!,
-      password: this.password?.value!,
-      confirmPassword: this.confirmPassword?.value!
-    };
-
-    this.accountService.register(dto).subscribe({
-      next: () => {
-        this.isLoading.set(false);
-        this.router.navigate(['/home']);
-      },
-      error: (error) => {
-        console.error('Registration failed:', error);
-        this.isLoading.set(false);
-      }
-    });
   }
 
   cancel() {

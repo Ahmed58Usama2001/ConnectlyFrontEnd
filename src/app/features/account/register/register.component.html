@@ -20,12 +20,14 @@
 
       <!-- Registration Form -->
       <div class="bg-white backdrop-blur-sm rounded-3xl shadow-2xl border border-pink-100 p-8">
-        <ul class="steps w-full ">
+        <ul class="steps w-full mb-6">
           <li class="step step-primary">Credentials</li>
           <li [class.step-primary]="currentStep() === 2" class="step">Profile</li>
         </ul>
-        @if (currentStep()==1) {
-        <form [formGroup]="credintialsForm" class="flex flex-col w-full gap-4 steps">
+
+        <!-- Step 1: Credentials Form -->
+        @if (currentStep() === 1) {
+        <form [formGroup]="credentialsForm" class="flex flex-col w-full gap-4">
           <!-- Email Field -->
           <div class="form-control mb-6">
             <label class="label">
@@ -139,36 +141,112 @@
 
             <button type="button" (click)="nextStep()"
               class="btn btn-lg flex-1 bg-gradient-to-r from-pink-500 to-rose-600 hover:from-pink-600 hover:to-rose-700 text-white border-none shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
-              [disabled]="isLoading() || credintialsForm.invalid" [class.opacity-50]="credintialsForm.invalid">
-              <span *ngIf="!isLoading()" class="flex items-center">
+              [disabled]="isLoading() || credentialsForm.invalid" [class.opacity-50]="credentialsForm.invalid">
+              <span class="flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                  stroke="currentColor" class="size-6">
+                  stroke="currentColor" class="w-5 h-5 mr-2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="m15 15 6-6m0 0-6-6m6 6H9a6 6 0 0 0 0 12h3" />
                 </svg>
-
                 Next
-              </span>
-              <span *ngIf="isLoading()" class="flex items-center">
-                <span class="loading loading-spinner loading-sm mr-2"></span>
-                Next Step...
               </span>
             </button>
           </div>
         </form>
         }
-        @if (currentStep()==2) {
-        <form [formGroup]="profileForm" class="flex flex-col w-full gap-4 steps">
-          <div>
-            Profile Form goes here
+
+        <!-- Step 2: Profile Form -->
+        @if (currentStep() === 2) {
+        <form [formGroup]="profileForm" class="flex flex-col w-full gap-4">
+          <!-- Gender Field -->
+          <div class="form-control mb-6">
+            <label class="label">
+              <span class="label-text font-semibold text-gray-700">Gender</span>
+            </label>
+            <div class="flex gap-4 mt-2">
+              <label class="cursor-pointer flex items-center space-x-2">
+                <input type="radio" value="Male" formControlName="gender" 
+                  class="radio radio-primary" [disabled]="isLoading()" />
+                <span class="label-text">Male</span>
+              </label>
+              <label class="cursor-pointer flex items-center space-x-2">
+                <input type="radio" value="Female" formControlName="gender" 
+                  class="radio radio-primary" [disabled]="isLoading()" />
+                <span class="label-text">Female</span>
+              </label>
+              <label class="cursor-pointer flex items-center space-x-2">
+                <input type="radio" value="Other" formControlName="gender" 
+                  class="radio radio-primary" [disabled]="isLoading()" />
+                <span class="label-text">Other</span>
+              </label>
+            </div>
+            <label class="label" *ngIf="gender?.touched && gender?.invalid">
+              <span class="label-text-alt text-red-500">Please select your gender</span>
+            </label>
           </div>
+
+          <!-- Date of Birth Field -->
+          <div class="form-control mb-6">
+            <label class="label">
+              <span class="label-text font-semibold text-gray-700">Date of Birth</span>
+            </label>
+            <input type="date" 
+              class="input input-lg bg-white border-pink-200 focus:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-200 transition-all duration-200 w-full text-gray-800"
+              formControlName="dateOfBirth" [disabled]="isLoading()" required [max]="maxDate"
+              [class.border-red-300]="dateOfBirth?.touched && dateOfBirth?.invalid"
+              [class.border-green-300]="dateOfBirth?.valid" />
+            <label class="label" *ngIf="dateOfBirth?.touched && dateOfBirth?.invalid">
+              <span class="label-text-alt text-red-500">
+                <span *ngIf="dateOfBirth?.errors?.['required']">Date of birth is required</span>
+                <span *ngIf="dateOfBirth?.errors?.['minAge']">You must be at least 18 years old</span>
+                <span *ngIf="dateOfBirth?.errors?.['maxAge']">Please enter a valid date of birth</span>
+              </span>
+            </label>
+          </div>
+
+          <!-- City Field -->
+          <div class="form-control mb-6">
+            <label class="label">
+              <span class="label-text font-semibold text-gray-700">City</span>
+            </label>
+            <input type="text" placeholder="Enter your city"
+              class="input input-lg bg-white border-pink-200 focus:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-200 transition-all duration-200 w-full text-gray-800"
+              formControlName="city" [disabled]="isLoading()" required
+              [class.border-red-300]="city?.touched && city?.invalid"
+              [class.border-green-300]="city?.valid" />
+            <label class="label" *ngIf="city?.touched && city?.invalid">
+              <span class="label-text-alt text-red-500">
+                <span *ngIf="city?.errors?.['required']">City is required</span>
+                <span *ngIf="city?.errors?.['minlength']">City must be at least 2 characters long</span>
+                <span *ngIf="city?.errors?.['maxlength']">City cannot exceed 50 characters</span>
+              </span>
+            </label>
+          </div>
+
+          <!-- Country Field -->
+          <div class="form-control mb-6">
+            <label class="label">
+              <span class="label-text font-semibold text-gray-700">Country</span>
+            </label>
+            <select formControlName="country" [disabled]="isLoading()" required
+              class="select select-lg bg-white border-pink-200 focus:border-pink-400 focus:outline-none focus:ring-2 focus:ring-pink-200 transition-all duration-200 w-full text-gray-800"
+              [class.border-red-300]="country?.touched && country?.invalid"
+              [class.border-green-300]="country?.valid">
+              <option value="" disabled>Select your country</option>
+              <option *ngFor="let c of countries" [value]="c">{{ c }}</option>
+            </select>
+            <label class="label" *ngIf="country?.touched && country?.invalid">
+              <span class="label-text-alt text-red-500">Please select your country</span>
+            </label>
+          </div>
+
+          <!-- Action Buttons -->
           <div class="flex flex-col sm:flex-row gap-4 mt-8">
             <button type="button"
               class="btn btn-lg flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 border-none transition-all duration-200"
               (click)="prevStep()" [disabled]="isLoading()">
-              <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd"
-                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                  clip-rule="evenodd"></path>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-5 h-5 mr-2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
               </svg>
               Back
             </button>
@@ -182,7 +260,7 @@
                     d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
                     clip-rule="evenodd"></path>
                 </svg>
-                register
+                Create Account
               </span>
               <span *ngIf="isLoading()" class="flex items-center">
                 <span class="loading loading-spinner loading-sm mr-2"></span>

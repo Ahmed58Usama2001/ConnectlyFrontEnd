@@ -2,7 +2,7 @@ import { Component, computed, input, model, output } from '@angular/core';
 
 @Component({
   selector: 'app-paginator',
-  standalone: true, // make it standalone if needed
+  standalone: true,
   templateUrl: './paginator.component.html',
   styleUrls: ['./paginator.component.css']
 })
@@ -25,6 +25,55 @@ export class PaginatorComponent {
   lastItemIndex = computed(() => {
     return Math.min(this.pageNumber() * this.pageSize(), this.totalCount());
   });
+
+  // Computed: visible page numbers with ellipsis logic
+  visiblePages = computed(() => {
+    const current = this.pageNumber();
+    const total = this.totalPages();
+    const pages: (number | string)[] = [];
+
+    if (total <= 7) {
+      // Show all pages if total is 7 or less
+      for (let i = 1; i <= total; i++) {
+        pages.push(i);
+      }
+    } else {
+      // Always show first page
+      pages.push(1);
+
+      if (current <= 4) {
+        // Show pages 2, 3, 4, 5 and ellipsis
+        for (let i = 2; i <= 5; i++) {
+          pages.push(i);
+        }
+        pages.push('...');
+        pages.push(total);
+      } else if (current >= total - 3) {
+        // Show ellipsis and last 4 pages
+        pages.push('...');
+        for (let i = total - 4; i <= total; i++) {
+          pages.push(i);
+        }
+      } else {
+        // Show ellipsis, current page with neighbors, ellipsis
+        pages.push('...');
+        for (let i = current - 1; i <= current + 1; i++) {
+          pages.push(i);
+        }
+        pages.push('...');
+        pages.push(total);
+      }
+    }
+
+    return pages;
+  });
+
+  // Helper method to handle page number clicks
+  onPageNumberClick(page: number | string) {
+    if (typeof page === 'number') {
+      this.onPageChange(page);
+    }
+  }
 
   // Handle page/size changes
   onPageChange(newPage?: number, pageSizeTarget?: EventTarget | null) {

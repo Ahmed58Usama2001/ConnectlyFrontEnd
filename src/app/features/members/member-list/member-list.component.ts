@@ -1,6 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { MemberService } from '../../../core/services/member.service';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { Member } from '../../../shared/models/membet';
 import { AsyncPipe } from '@angular/common';
 import { MemberCardComponent } from '../member-card/member-card.component';
@@ -18,13 +18,23 @@ export class MemberListComponent {
   private memberService = inject(MemberService);
   protected paginatedMembers$!: Observable<Pagination<Member>>;
   params = new MemberParams();
+  
+  // Signal to track total pages
+  totalPages = signal(1);
 
   constructor() {
     this.loadMembers();
   }
 
   loadMembers() {
-    this.paginatedMembers$ = this.memberService.getMembers(this.params);
+    this.paginatedMembers$ = this.memberService.getMembers(this.params).pipe(
+      map(response => {
+        // Update total pages when data arrives
+        const calculatedTotalPages = Math.ceil(response.count / this.params.pageSize) || 1;
+        this.totalPages.set(calculatedTotalPages);
+        return response;
+      })
+    );
   }
 
   onPageChange(event: { pageIndex: number; pageSize: number }) {
@@ -32,6 +42,4 @@ export class MemberListComponent {
     this.params.pageSize = event.pageSize;
     this.loadMembers();
   }
-
-
 }

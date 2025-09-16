@@ -18,12 +18,15 @@ export class MemberService {
   getMembers(MemberParams: MemberParams) {
     let params = new HttpParams();
 
-  if (MemberParams.sort) params = params.append('sort', MemberParams.sort);
-  if (MemberParams.search) params = params.append('search', MemberParams.search);
+  // if (MemberParams.sort) params = params.append('sort', MemberParams.sort);
+  // if (MemberParams.search) params = params.append('search', MemberParams.search);
 
 
   params = params.append('pageSize', MemberParams.pageSize);
   params = params.append('pageIndex', MemberParams.pageNumber);
+  params = params.append('minAge', MemberParams.minAge);
+  params = params.append('maxAge', MemberParams.maxAge);
+  if(MemberParams.gender) params = params.append('gender',MemberParams.gender)
     return this.http.get<Pagination<Member>>(`${this.baseUrl}members`, { params });
   }
 

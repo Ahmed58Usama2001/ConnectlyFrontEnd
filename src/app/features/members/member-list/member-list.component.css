@@ -30,3 +30,65 @@
     transform: translateY(0);
   }
 }
+
+/* Custom button styles for pink theme */
+.btn-pink-primary {
+  background-color: transparent;
+  border: 2px solid #F9718E;
+  color: #F9718E;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-pink-primary:hover {
+  background-color: #F9718E;
+  color: #FEF2F6;
+}
+
+.btn-pink-secondary {
+  background-color: transparent;
+  border: 2px solid #FEF2F6;
+  color: #F9718E;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-pink-secondary:hover {
+  background-color: #FEF2F6;
+  color: #F9718E;
+}
+
+/* Alternative filled styles */
+.btn-pink-filled {
+  background-color: #F9718E;
+  border: 2px solid #F9718E;
+  color: #FEF2F6;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-pink-filled:hover {
+  background-color: #e85d7a;
+  border-color: #e85d7a;
+}
+
+.btn-pink-light {
+  background-color: #FEF2F6;
+  border: 2px solid #FEF2F6;
+  color: #F9718E;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-pink-light:hover {
+  background-color: #fce4ec;
+  border-color: #fce4ec;
+}

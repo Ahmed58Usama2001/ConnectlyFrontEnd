@@ -4,4 +4,5 @@ export class MemberParams {
     gender?:string;
     minAge:number=18;
     maxAge:number=100;
+    sort = 'lastActive';
 }

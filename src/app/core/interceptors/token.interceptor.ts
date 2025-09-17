@@ -4,14 +4,14 @@ import { catchError, throwError } from 'rxjs';
 import { AccounService } from '../services/accoun.service';
 import { Router } from '@angular/router';
 
-export const tokenInterceptor: HttpInterceptorFn = (req, next) =>{
+let isLoggingOut = false;
+
+export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
   const accountService = inject(AccounService);
   const router = inject(Router);
-  
+
   const user = accountService.currentUser();  
 
- 
-  
   let authReq = req;
   if (user && user.token) {
     authReq = req.clone({
@@ -23,9 +23,14 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) =>{
 
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
-      if (error.status === 401) {
-        accountService.logout().subscribe();
-        router.navigate(['/home']);
+      if (error.status === 401 && !isLoggingOut && !req.url.includes('/login')) {
+        isLoggingOut = true;
+
+        accountService.logout().subscribe(() => {
+          router.navigate(['/home']).then(() => {
+            isLoggingOut = false;
+          });
+        });
       }
       
       return throwError(() => error);

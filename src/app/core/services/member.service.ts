@@ -26,6 +26,7 @@ export class MemberService {
   params = params.append('pageIndex', MemberParams.pageNumber);
   params = params.append('minAge', MemberParams.minAge);
   params = params.append('maxAge', MemberParams.maxAge);
+  params = params.append('sort', MemberParams.sort);
   if(MemberParams.gender) params = params.append('gender',MemberParams.gender)
     return this.http.get<Pagination<Member>>(`${this.baseUrl}members`, { params });
   }

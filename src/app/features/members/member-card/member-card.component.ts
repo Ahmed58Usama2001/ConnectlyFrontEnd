@@ -1,11 +1,13 @@
 import { Component, input, computed } from '@angular/core';
 import { Member } from '../../../shared/models/membet';
-import { DatePipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { TimeAgoPipe } from '../../../shared/pipes/time-ago.pipe';
+import { PlatformDaysPipe } from '../../../shared/pipes/platform-days.pipe';
+import { AgeCalculatorPipe } from '../../../shared/pipes/age-calculator.pipe';
 
 @Component({
   selector: 'app-member-card',
-  imports: [DatePipe, RouterModule],
+  imports: [RouterModule,TimeAgoPipe , PlatformDaysPipe, AgeCalculatorPipe],
   templateUrl: './member-card.component.html',
   styleUrl: './member-card.component.css'
 })
@@ -24,15 +26,4 @@ export class MemberCardComponent {
     return age;
   });
 
-  timeAgo = computed(() => {
-    const lastActive = new Date(this.member().lastActive);
-    const now = new Date();
-    const diffTime = Math.abs(now.getTime() - lastActive.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
-    if (diffDays === 1) return '1 day ago';
-    if (diffDays < 7) return `${diffDays} days ago`;
-    if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
-    return `${Math.floor(diffDays / 30)} months ago`;
-  });
 }

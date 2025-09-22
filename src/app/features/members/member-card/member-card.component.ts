@@ -18,4 +18,26 @@ export class MemberCardComponent {
 
   protected isLiked = computed(() => this.likesService.likeIds().includes(this.member().id));
 
+  toggleLike(event: Event) {
+    console.log('gggggggggg');
+    
+    event.preventDefault(); 
+    event.stopPropagation(); 
+    
+    this.likesService.toggleLike(this.member().id).subscribe({
+      next: () => {
+        const currentLikeIds = this.likesService.likeIds();
+        const memberId = this.member().id;
+        
+        if (currentLikeIds.includes(memberId)) {
+          this.likesService.likeIds.set(currentLikeIds.filter(id => id !== memberId));
+        } else {
+          this.likesService.likeIds.set([...currentLikeIds, memberId]);
+        }
+      },
+      error: (error) => {
+        console.error('Error toggling like:', error);
+      }
+    });
+  }
 }

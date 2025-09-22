@@ -5,6 +5,7 @@ import { TimeAgoPipe } from '../../../shared/pipes/time-ago.pipe';
 import { PlatformDaysPipe } from '../../../shared/pipes/platform-days.pipe';
 import { AgeCalculatorPipe } from '../../../shared/pipes/age-calculator.pipe';
 import { LikesService } from '../../../core/services/likes.service';
+import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
   selector: 'app-member-card',
@@ -14,13 +15,12 @@ import { LikesService } from '../../../core/services/likes.service';
 })
 export class MemberCardComponent {
   private likesService = inject(LikesService);
+  private toastService = inject(ToastService);
   member = input.required<Member>();
 
   protected isLiked = computed(() => this.likesService.likeIds().includes(this.member().id));
 
-  toggleLike(event: Event) {
-    console.log('gggggggggg');
-    
+  toggleLike(event: Event) {    
     event.preventDefault(); 
     event.stopPropagation(); 
     
@@ -36,7 +36,7 @@ export class MemberCardComponent {
         }
       },
       error: (error) => {
-        console.error('Error toggling like:', error);
+        this.toastService.Error(error.message);
       }
     });
   }

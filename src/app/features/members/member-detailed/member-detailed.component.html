@@ -57,10 +57,12 @@
                             }
                             @else {
                             <button (click)="likeUser()"
-                                class="cursor-pointer w-full bg-pink-500 hover:bg-pink-600 text-white px-4 py-3 rounded-lg font-medium hover:shadow-lg transition-all duration-200 flex items-center justify-center"
-                                style="background-color: rgb(252, 60, 114)">
-                                <i class="fas fa-heart mr-2"></i>
-                                Like User
+                                [class]="isLiked() ? 
+                                    'cursor-pointer w-full bg-red-500 hover:bg-red-600 text-white px-4 py-3 rounded-lg font-medium hover:shadow-lg transition-all duration-200 flex items-center justify-center' :
+                                    'cursor-pointer w-full bg-pink-500 hover:bg-pink-600 text-white px-4 py-3 rounded-lg font-medium hover:shadow-lg transition-all duration-200 flex items-center justify-center'"
+                                [style.background-color]="isLiked() ? 'rgb(239, 68, 68)' : 'rgb(252, 60, 114)'">
+                                <i [class]="isLiked() ? 'fas fa-heart-broken mr-2' : 'fas fa-heart mr-2'"></i>
+                                {{ isLiked() ? 'Unlike User' : 'Like User' }}
                             </button>
                             }
                             <button (click)="goBack()"

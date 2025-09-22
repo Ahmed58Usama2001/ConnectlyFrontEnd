@@ -4,6 +4,7 @@ import { environment } from '../../../environments/environment.development';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs';
 import { User, RegisterDto, LoginDto } from '../../shared/models/user';
+import { LikesService } from './likes.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,7 @@ export class AccounService {
   private baseUrl = environment.apiUrl + 'account/';
   private http = inject(HttpClient);
   private router = inject(Router);
+  private likesService = inject(LikesService);
 
   private userSignal = signal<User | null>(this.getUserFromLocalStorage());
 
@@ -32,6 +34,8 @@ export class AccounService {
   logout() {
     return this.http.post(this.baseUrl + 'logout', {}).pipe(
       tap(() => {
+        localStorage.removeItem('user');
+        this.likesService.clearLikeIds();
         this.setUser(null);
         this.router.navigate(['/home']);
       })
@@ -56,5 +60,6 @@ export class AccounService {
       localStorage.removeItem('user');
     }
     this.userSignal.set(user);
+    this.likesService.getLikeIds();
   }
 }

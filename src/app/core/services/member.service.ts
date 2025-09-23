@@ -18,9 +18,6 @@ export class MemberService {
   getMembers(MemberParams: MemberParams) {
     let params = new HttpParams();
 
-  // if (MemberParams.sort) params = params.append('sort', MemberParams.sort);
-  // if (MemberParams.search) params = params.append('search', MemberParams.search);
-
 
   params = params.append('pageSize', MemberParams.pageSize);
   params = params.append('pageIndex', MemberParams.pageNumber);

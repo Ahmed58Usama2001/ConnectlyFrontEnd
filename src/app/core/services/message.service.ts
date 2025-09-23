@@ -14,10 +14,13 @@ export class MessageService {
   getMessages( container: string , pageIndex: number, pageSize: number,) {
     let params = new HttpParams();
 
-
     params = params.append('pageSize', pageSize);
     params = params.append('pageIndex',pageIndex);
     params = params.append('container', container);
     return this.http.get<Pagination<Message>>(`${this.baseUrl}`, { params });
+  }
+
+  getMessageThread(memberId: string) {
+    return this.http.get<Message[]>(`${this.baseUrl}/thread/${memberId}`);
   }
 }

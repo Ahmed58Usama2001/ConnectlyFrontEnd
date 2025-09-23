@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
-import { Member } from '../../shared/models/membet';
+import { Member } from '../../shared/models/member';
 
 @Injectable({
   providedIn: 'root'

@@ -1,20 +1,36 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { MessageService } from '../../core/services/message.service';
 import { Pagination } from '../../shared/models/pagination';
 import { Message } from '../../shared/models/message';
+import { PaginatorComponent } from "../../shared/paginator/paginator.component";
+import { DatePipe, UpperCasePipe } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-messages',
-  imports: [],
+  imports: [PaginatorComponent,DatePipe ,RouterModule],
   templateUrl: './messages.component.html',
   styleUrl: './messages.component.css'
 })
 export class MessagesComponent implements OnInit {
   private messageService = inject(MessageService);
-  protected container = 'Inbox'
-  protected pageIndex = 1
-  protected pageSize = 10
+
+  protected container = 'Inbox';
+  protected fetchedContainer = 'Inbox';
+  protected pageIndex = 1;
+  protected pageSize = 10;
   protected paginatedMessages = signal<Pagination<Message> | null>(null);
+
+  tabs = [
+    { label: 'Inbox', value: 'Inbox' },
+    { label: 'Outbox', value: 'Outbox' },
+  ];
+
+  totalPages = computed(() => {
+    const pagination = this.paginatedMessages();
+    if (!pagination) return 0;
+    return Math.ceil(pagination.count / pagination.pageSize);
+  });
 
   ngOnInit(): void {
     this.loadMessages();
@@ -24,7 +40,24 @@ export class MessagesComponent implements OnInit {
     this.messageService.getMessages(this.container, this.pageIndex, this.pageSize).subscribe({
       next: (response) => {
         this.paginatedMessages.set(response);
+        this.fetchedContainer=this.container
       }
     });
+  }
+
+  get isInbox() {
+    return this.fetchedContainer === 'Inbox';
+  }
+
+  setContainer(container: string) {
+    this.container = container;
+    this.pageIndex = 1;
+    this.loadMessages();
+  }
+
+  onPageChange(event: { pageIndex: number, pageSize: number }) {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.loadMessages();
   }
 }

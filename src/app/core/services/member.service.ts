@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
-import { EditableMember, Member, Photo } from '../../shared/models/membet';
+import { EditableMember, Member, Photo } from '../../shared/models/member';
 import { tap } from 'rxjs';
 import { Pagination } from '../../shared/models/pagination';
 import { MemberParams } from '../../shared/models/memberParams';

@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { LikesService } from '../../core/services/likes.service';
-import { Member } from '../../shared/models/membet';
+import { Member } from '../../shared/models/member';
 import { MemberCardComponent } from "../members/member-card/member-card.component";
 
 @Component({

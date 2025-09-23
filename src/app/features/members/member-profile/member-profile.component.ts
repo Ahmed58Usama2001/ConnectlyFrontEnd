@@ -1,5 +1,5 @@
 import { Component, HostListener, inject, OnInit, ViewChild } from '@angular/core';
-import { EditableMember, Member } from '../../../shared/models/membet';
+import { EditableMember, Member } from '../../../shared/models/member';
 import { CommonModule, DatePipe, SlicePipe } from '@angular/common';
 import { AgeCalculatorPipe } from '../../../shared/pipes/age-calculator.pipe';
 import { TimeAgoPipe } from '../../../shared/pipes/time-ago.pipe';

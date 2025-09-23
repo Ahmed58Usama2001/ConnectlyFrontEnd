@@ -1,5 +1,5 @@
 import { Component, input, computed, inject } from '@angular/core';
-import { Member } from '../../../shared/models/membet';
+import { Member } from '../../../shared/models/member';
 import { RouterModule } from '@angular/router';
 import { TimeAgoPipe } from '../../../shared/pipes/time-ago.pipe';
 import { PlatformDaysPipe } from '../../../shared/pipes/platform-days.pipe';

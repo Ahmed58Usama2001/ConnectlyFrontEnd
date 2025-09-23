@@ -1,7 +1,7 @@
 import { Component, inject, signal, ViewChild, viewChild } from '@angular/core';
 import { MemberService } from '../../../core/services/member.service';
 import { Observable, map } from 'rxjs';
-import { Member } from '../../../shared/models/membet';
+import { Member } from '../../../shared/models/member';
 import { AsyncPipe } from '@angular/common';
 import { MemberCardComponent } from '../member-card/member-card.component';
 import { Pagination } from '../../../shared/models/pagination';
@@ -21,7 +21,6 @@ export class MemberListComponent {
   protected paginatedMembers$!: Observable<Pagination<Member>>;
   protected params = new MemberParams();
   
-  // Signal to track total pages
   totalPages = signal(1);
 
   constructor() {

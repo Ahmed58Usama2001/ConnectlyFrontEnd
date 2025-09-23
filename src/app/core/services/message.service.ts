@@ -27,4 +27,8 @@ export class MessageService {
   sendMessage(recipientId: string, content: string) {
     return this.http.post<Message>(`${this.baseUrl}`, {recipientId, content});
   }
+
+  deleteMessage(id: number) {
+    return this.http.delete(`${this.baseUrl}/${id}`);
+  }
 }

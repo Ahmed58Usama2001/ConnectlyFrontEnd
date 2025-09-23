@@ -3,12 +3,12 @@ import { MessageService } from '../../core/services/message.service';
 import { Pagination } from '../../shared/models/pagination';
 import { Message } from '../../shared/models/message';
 import { PaginatorComponent } from "../../shared/paginator/paginator.component";
-import { DatePipe, UpperCasePipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-messages',
-  imports: [PaginatorComponent,DatePipe ,RouterModule],
+  imports: [PaginatorComponent, DatePipe, RouterModule],
   templateUrl: './messages.component.html',
   styleUrl: './messages.component.css'
 })
@@ -40,7 +40,27 @@ export class MessagesComponent implements OnInit {
     this.messageService.getMessages(this.container, this.pageIndex, this.pageSize).subscribe({
       next: (response) => {
         this.paginatedMessages.set(response);
-        this.fetchedContainer=this.container
+        this.fetchedContainer = this.container;
+      }
+    });
+  }
+
+  deleteMessage(event: Event, id: number) {
+    event.stopPropagation();
+    this.messageService.deleteMessage(id).subscribe({
+      next: () => {
+        this.loadMessages();
+         const current = this.paginatedMessages();
+        if (current) {
+          const newData = current.data.filter(m => m.id !== id);
+          const newCount = current.count > 0 ? current.count - 1 : 0;
+
+          this.paginatedMessages.set({
+            ...current,
+            data: newData,
+            count: newCount
+          });
+        }
       }
     });
   }

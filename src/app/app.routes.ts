@@ -15,6 +15,7 @@ import { MemberMessagesComponent } from './features/members/member-messages/memb
 import { memberResolver } from './features/members/member-resolver.resolver';
 import { preventUnsavedChangesGuard } from './core/guards/prevent-unsaved-changes.guard';
 import { AdminComponent } from './features/admin/admin.component';
+import { adminGuard } from './core/guards/admin.guard';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -30,7 +31,7 @@ export const routes: Routes = [
      },
     { path: 'lists', component: ListsComponent, canActivate: [authGuard] },
     { path: 'messages', component: MessagesComponent, canActivate: [authGuard] },
-    { path: 'admin', component: AdminComponent, canActivate: [authGuard] },
+    { path: 'admin', component: AdminComponent, canActivate: [adminGuard] },
     { path: 'register', component: RegisterComponent,canActivate: [registerationGuard] },
     {path:'server-error' , component:ServerErrorComponent},
     { path: '**', component:NotFoundComponent }

@@ -16,7 +16,7 @@ import { BusyService } from '../../core/services/busy.service';
   styleUrl: './nav.component.css'
 })
 export class NavComponent implements OnInit {
- 
+
   private accountService = inject(AccounService);
   private router = inject(Router);
   private toast = inject(ToastService)
@@ -33,18 +33,23 @@ export class NavComponent implements OnInit {
   protected showLoginForm = signal(true);
   protected currentUser = computed(() => this.accountService.currentUser());
   protected isLoggedIn = computed(() => !!this.currentUser());
+  protected hasAdminAccess = computed(() => {
+    const user = this.currentUser();
+    if (!user || !user.roles) return false;
+    return user.roles.includes('Admin') || user.roles.includes('Moderator');
+  });
 
   protected activeTab = signal('matches');
 
 
   ngOnInit(): void {
-    document.documentElement.setAttribute('data-theme',this.selectedTheme());
+    document.documentElement.setAttribute('data-theme', this.selectedTheme());
   }
-  
+
   handleSelectTheme(theme: string) {
     this.selectedTheme.set(theme);
     localStorage.setItem('theme', theme);
-    document.documentElement.setAttribute('data-theme',theme)
+    document.documentElement.setAttribute('data-theme', theme)
   }
 
   login() {
@@ -68,7 +73,7 @@ export class NavComponent implements OnInit {
           for (const field in error.error.errors) {
             if (error.error.errors.hasOwnProperty(field)) {
               const messages: string[] = error.error.errors[field];
-              messages.forEach(msg => this.toast.Error(msg)); 
+              messages.forEach(msg => this.toast.Error(msg));
             }
           }
         } else if (error.error?.title) {
@@ -92,13 +97,14 @@ export class NavComponent implements OnInit {
         this.router.navigate(['/home']);
       },
       error: (error) => {
+
         this.isLoading.set(false);
       }
     });
   }
 
 
-  navigateToHome(){
+  navigateToHome() {
     this.router.navigate(['/home']);
   }
 

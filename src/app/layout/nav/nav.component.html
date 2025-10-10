@@ -53,7 +53,8 @@
         Messages
       </a>
       <a class="tab transition-all duration-200" routerLink="/admin"
-        routerLinkActive="tab-active bg-gradient-to-r from-pink-400 to-rose-400 text-white shadow-md">
+        routerLinkActive="tab-active bg-gradient-to-r from-pink-400 to-rose-400 text-white shadow-md"
+        *ngIf="hasAdminAccess()">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
           class="size-6">
           <path stroke-linecap="round" stroke-linejoin="round"

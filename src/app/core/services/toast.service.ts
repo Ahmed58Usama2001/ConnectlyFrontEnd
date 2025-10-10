@@ -22,7 +22,7 @@ export class ToastService {
     if(!toastContainer) return;
 
     const toast = document.createElement('div');
-    toast.classList.add('alert', alertClass, 'shadow-lg')
+    toast.classList.add('alert', alertClass, 'shadow-lg','z-50')
     toast.innerHTML = `
       <span>${message}</span>
       <button class="btn btn-sm btn-ghost ml-44">X</button>

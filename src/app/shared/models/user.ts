@@ -4,6 +4,7 @@ export interface User {
   userName: string;
   token: string;
   imageUrl?: string;
+  roles:string[]
 }
 
 

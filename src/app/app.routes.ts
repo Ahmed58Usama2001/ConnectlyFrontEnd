@@ -14,6 +14,7 @@ import { MemberPhotosComponent } from './features/members/member-photos/member-p
 import { MemberMessagesComponent } from './features/members/member-messages/member-messages.component';
 import { memberResolver } from './features/members/member-resolver.resolver';
 import { preventUnsavedChangesGuard } from './core/guards/prevent-unsaved-changes.guard';
+import { AdminComponent } from './features/admin/admin.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -29,6 +30,7 @@ export const routes: Routes = [
      },
     { path: 'lists', component: ListsComponent, canActivate: [authGuard] },
     { path: 'messages', component: MessagesComponent, canActivate: [authGuard] },
+    { path: 'admin', component: AdminComponent, canActivate: [authGuard] },
     { path: 'register', component: RegisterComponent,canActivate: [registerationGuard] },
     {path:'server-error' , component:ServerErrorComponent},
     { path: '**', component:NotFoundComponent }

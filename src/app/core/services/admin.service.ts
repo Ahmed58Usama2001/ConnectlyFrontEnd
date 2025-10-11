@@ -16,6 +16,6 @@ export class AdminService {
   }
 
   updateUserRoles(userId: string, roles: string[]) {
-    return this.http.post<string[]>(this.baseUrl + '/edit-roles/' + userId + '?roles=' + roles, {});
+    return this.http.put<string[]>(this.baseUrl + '/edit-roles/' + userId + '?roles=' + roles, {});
   }
 }

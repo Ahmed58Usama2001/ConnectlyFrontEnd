@@ -30,4 +30,28 @@ export class UserManagementComponent implements OnInit {
     this.selectedUser = user;
     this.rolesModal.nativeElement.showModal();
   }
+
+  toggleRole(evemt: Event, role: string) {
+    if (!this.selectedUser) return;
+    const checkbox = evemt.target as HTMLInputElement;
+    if (checkbox.checked) {
+      this.selectedUser.roles.push(role);
+    } else {
+      this.selectedUser.roles = this.selectedUser.roles.filter(r => r !== role);
+    }
+  }
+
+  updateUserRoles() {
+    if (!this.selectedUser) return;
+    this.adminService.updateUserRoles(this.selectedUser.id, this.selectedUser.roles).subscribe({
+      next: (updatedRoles) => {
+        this.users.update(users =>users.map(user => {
+          if (user.id === this.selectedUser?.id) user.roles = updatedRoles;
+          return user;
+        }));
+        this.rolesModal.nativeElement.close()
+      },
+      error: error => console.log(error)
+    })
+  }
 }

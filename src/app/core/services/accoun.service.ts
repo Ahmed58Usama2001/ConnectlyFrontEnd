@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { catchError, interval, of, Subscription, tap } from 'rxjs';
 import { User, RegisterDto, LoginDto } from '../../shared/models/user';
 import { LikesService } from './likes.service';
+import { PresenceService } from './presence.service';
+import { HubConnectionState } from '@microsoft/signalr';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +16,7 @@ export class AccounService {
   private http = inject(HttpClient);
   private router = inject(Router);
   private likesService = inject(LikesService);
+  private presenceService = inject(PresenceService);
 
   private userSignal = signal<User | null>(this.getUserFromLocalStorage());
   readonly currentUser = computed(() => this.userSignal());
@@ -104,6 +107,8 @@ export class AccounService {
       this.userSignal.set(user);
       this.likesService.getLikeIds();
       this.startAutoRefresh();
+      if(this.presenceService.hubConnection?.state!==  HubConnectionState.Connected )
+        this.presenceService.CreateHubConnection(user);
     } else {
       localStorage.removeItem('user');
       this.userSignal.set(null);

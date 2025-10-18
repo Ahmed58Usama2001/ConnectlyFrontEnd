@@ -26,12 +26,11 @@ export class MessageService {
       })
       .withAutomaticReconnect()
       .build();
-
+      
     this.hubConnection.start().catch(error => console.log(error));
 
     this.hubConnection.on('ReceiveMessageThread', (messages: Message[]) => {
-
-      this.messageThread.set(messages.map(m => ({ ...m, currentUserSender: m.senderId !== otherUserId })));
+      this.messageThread.set(messages.map(m => ({ ...m, currentUserSender: m.senderId!== otherUserId })));
     });
   }
 

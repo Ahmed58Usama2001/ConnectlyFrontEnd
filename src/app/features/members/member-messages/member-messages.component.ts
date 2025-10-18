@@ -6,6 +6,7 @@ import { DatePipe } from '@angular/common';
 import { TimeAgoPipe } from '../../../shared/pipes/time-ago.pipe';
 import { FormsModule } from '@angular/forms';
 import { PresenceService } from '../../../core/services/presence.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-member-messages',
@@ -13,10 +14,10 @@ import { PresenceService } from '../../../core/services/presence.service';
   templateUrl: './member-messages.component.html',
   styleUrl: './member-messages.component.css'
 })
-export class MemberMessagesComponent implements OnInit, AfterViewChecked {
-  @ViewChild('messagesContainer', { static: false }) messagesContainer!: ElementRef;
+export class MemberMessagesComponent implements OnInit {
   
-  private messagesService = inject(MessageService);
+  protected messagesService = inject(MessageService);
+  private route = inject(ActivatedRoute)
   protected memberService = inject(MemberService);
   protected presenceService = inject(PresenceService)
   protected messages = signal<Message[]>([]);
@@ -25,34 +26,27 @@ export class MemberMessagesComponent implements OnInit, AfterViewChecked {
   private shouldScrollToBottom = false;
 
   ngOnInit(): void {
-    this.loadMessages();
-  }
+    this.route.parent?.paramMap.subscribe({
+      next: params=> {
+        const otherUserId = params.get('id');
 
-  ngAfterViewChecked(): void {
-    if (this.shouldScrollToBottom) {
-      this.scrollToBottom();
-      this.shouldScrollToBottom = false;
-    }
-  }
-
-  private scrollToBottom(): void {
-    try {
-      if (this.messagesContainer) {
-        const container = this.messagesContainer.nativeElement;
-        container.scrollTop = container.scrollHeight;
-      }
-    } catch (err) {
-      console.error('Error scrolling to bottom:', err);
-    }
-  }
-
-  loadMessages() {
-    this.messagesService.getMessageThread(this.memberService.member()!.id).subscribe({
-      next: _ => {
-        this.shouldScrollToBottom = true;
+        
+        if(!otherUserId) throw new Error('Cannot connect to hub');
+        this.messagesService.createHubConnection(otherUserId);
       }
     });
   }
+
+ 
+
+ 
+  // loadMessages() {
+  //   this.messagesService.getMessageThread(this.memberService.member()!.id).subscribe({
+  //     next: _ => {
+  //       this.shouldScrollToBottom = true;
+  //     }
+  //   });
+  // }
 
   SendMessage() {
     const recipientId = this.memberService.member()?.id;

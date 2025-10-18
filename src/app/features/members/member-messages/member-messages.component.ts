@@ -47,10 +47,8 @@ export class MemberMessagesComponent implements OnInit, AfterViewChecked {
   }
 
   loadMessages() {
-    const memberId = this.memberService.member()!.id;
     this.messagesService.getMessageThread(this.memberService.member()!.id).subscribe({
-      next: response => {
-        this.messages.set(response.map(m => ({ ...m, currentUserSender: m.senderId !== memberId })));
+      next: _ => {
         this.shouldScrollToBottom = true;
       }
     });

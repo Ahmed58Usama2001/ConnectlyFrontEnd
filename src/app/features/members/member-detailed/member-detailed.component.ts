@@ -5,6 +5,7 @@ import { MemberService } from '../../../core/services/member.service';
 import { LikesService } from '../../../core/services/likes.service';
 import { AgeCalculatorPipe } from '../../../shared/pipes/age-calculator.pipe';
 import { ToastService } from '../../../core/services/toast.service';
+import { PresenceService } from '../../../core/services/presence.service';
 
 @Component({
   selector: 'app-member-detailed',
@@ -19,6 +20,7 @@ export class MemberDetailedComponent implements OnDestroy {
   private likesService = inject(LikesService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  protected presenceService = inject(PresenceService);
 
   protected isCurrentUser = computed(() => {
     return this.accountService.currentUser()?.id === this.memberService.member()?.id.toLocaleLowerCase();

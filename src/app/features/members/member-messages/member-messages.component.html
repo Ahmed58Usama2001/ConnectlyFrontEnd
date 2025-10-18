@@ -6,8 +6,13 @@
             Messages
         </h3>
         <div class="flex items-center text-sm text-gray-500">
-            <div class="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></div>
-            Active
+            @if (presenceService.onlineUsers().includes(memberService.member()!.id)) {
+                <div class="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></div>
+                <span>Online</span>
+            } @else {
+                <div class="w-2 h-2 bg-gray-400 rounded-full mr-2"></div>
+                <span>Offline</span>
+            }
         </div>
     </div>
 
@@ -19,11 +24,15 @@
             [class.received]="!message.currentUserSender">
             @if (!message.currentUserSender) {
             <div class="flex items-start space-x-3 animate-fadeInLeft">
-                <div class="flex-shrink-0">
+                <div class="flex-shrink-0 relative">
                     <div class="w-10 h-10 rounded-full overflow-hidden ring-2 ring-pink-200 shadow-md">
-                        <img [src]="message.senderImageUrl" [alt]="message.senderUserName"
+                        <img [src]="message.senderImageUrl || 'https://www.gravatar.com/avatar/?d=mp&s=200'" 
+                            [alt]="message.senderUserName"
                             class="w-full h-full object-cover">
                     </div>
+                    @if (presenceService.onlineUsers().includes(memberService.member()!.id)) {
+                        <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white shadow-sm"></div>
+                    }
                 </div>
                 <div class="flex flex-col max-w-xs lg:max-w-md">
                     <div class="flex items-center space-x-2 mb-1">
@@ -62,7 +71,8 @@
                 </div>
                 <div class="flex-shrink-0">
                     <div class="w-10 h-10 rounded-full overflow-hidden ring-2 ring-pink-300 shadow-md">
-                        <img [src]="message.senderImageUrl" [alt]="message.senderUserName"
+                        <img [src]="message.senderImageUrl || 'https://www.gravatar.com/avatar/?d=mp&s=200'" 
+                            [alt]="message.senderUserName"
                             class="w-full h-full object-cover">
                     </div>
                 </div>

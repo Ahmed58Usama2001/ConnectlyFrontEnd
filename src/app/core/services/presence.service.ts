@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
 import { ToastService } from './toast.service';
 import { HubConnection, HubConnectionBuilder, HubConnectionState } from '@microsoft/signalr';
@@ -10,10 +10,11 @@ import { User } from '../../shared/models/user';
 export class PresenceService {
 
   private hubUrl = environment.hubUrl;
-  private toastService= inject(ToastService);
- hubConnection? : HubConnection;
+  private toastService = inject(ToastService);
+  hubConnection?: HubConnection;
+  onlineUsers = signal<string[]>([]);
 
-  CreateHubConnection(user: User){
+  CreateHubConnection(user: User) {
     this.hubConnection = new HubConnectionBuilder()
       .withUrl(this.hubUrl + 'presence', {
         accessTokenFactory: () => user.token
@@ -21,19 +22,23 @@ export class PresenceService {
       .withAutomaticReconnect()
       .build();
 
-      this.hubConnection.start().catch(error => console.log(error));
+    this.hubConnection.start().catch(error => console.log(error));
 
-      this.hubConnection.on('UserIsOnline', email => {
-        this.toastService.Success(email + ' has connected');
-      });
+    this.hubConnection.on('UserIsOnline', userId => {
+      this.onlineUsers.update(users => [...users, userId]);
+    });
 
-      this.hubConnection.on('UserIsOffline', email => {
-        this.toastService.Info(email + ' has disconnected');
-      });
+    this.hubConnection.on('UserIsOffline', userId => {
+      this.onlineUsers.update(users => users.filter(u => u !== userId));
+    });
+
+    this.hubConnection.on('GetOnlineUsers', (userIds: string[]) => {
+      this.onlineUsers.set(userIds);
+    });
   }
 
-  StopHubConnection(){
-    if(this.hubConnection?.state ===HubConnectionState.Connected)
+  StopHubConnection() {
+    if (this.hubConnection?.state === HubConnectionState.Connected)
       this.hubConnection.stop().catch(error => console.log(error));
   }
 }

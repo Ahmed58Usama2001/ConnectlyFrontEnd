@@ -6,6 +6,7 @@ import { PlatformDaysPipe } from '../../../shared/pipes/platform-days.pipe';
 import { AgeCalculatorPipe } from '../../../shared/pipes/age-calculator.pipe';
 import { LikesService } from '../../../core/services/likes.service';
 import { ToastService } from '../../../core/services/toast.service';
+import { PresenceService } from '../../../core/services/presence.service';
 
 @Component({
   selector: 'app-member-card',
@@ -16,7 +17,11 @@ import { ToastService } from '../../../core/services/toast.service';
 export class MemberCardComponent {
   private likesService = inject(LikesService);
   private toastService = inject(ToastService);
+  private presenceService = inject(PresenceService);
   member = input.required<Member>();
+  protected isOnline = computed(() => {
+    return this.presenceService.onlineUsers().includes(this.member().id);
+  });
 
   protected isLiked = computed(() => this.likesService.likeIds().includes(this.member().id));
 

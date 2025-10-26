@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, ViewChild, ElementRef, AfterViewChecked, OnDestroy } from '@angular/core';
+import { Component, inject, OnInit, signal, ViewChild, ElementRef, AfterViewChecked, OnDestroy, effect } from '@angular/core';
 import { MessageService } from '../../../core/services/message.service';
 import { MemberService } from '../../../core/services/member.service';
 import { Message } from '../../../shared/models/message';
@@ -14,14 +14,25 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './member-messages.component.html',
   styleUrl: './member-messages.component.css'
 })
-export class MemberMessagesComponent implements OnInit, OnDestroy {
- 
+export class MemberMessagesComponent implements OnInit, OnDestroy, AfterViewChecked {
+  @ViewChild('messagesContainer') private messagesContainer!: ElementRef<HTMLDivElement>;
+  
   protected messagesService = inject(MessageService);
   private route = inject(ActivatedRoute);
   protected memberService = inject(MemberService);
   protected presenceService = inject(PresenceService);
   protected messageContent = '';
   private otherUserId = '';
+  private shouldScrollToBottom = false;
+
+  constructor() {
+    effect(() => {
+      const messages = this.messagesService.messageThread();
+      if (messages.length > 0) {
+        this.shouldScrollToBottom = true;
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.route.parent?.paramMap.subscribe({
@@ -35,6 +46,24 @@ export class MemberMessagesComponent implements OnInit, OnDestroy {
     });
   }
 
+  ngAfterViewChecked(): void {
+    if (this.shouldScrollToBottom) {
+      this.scrollToBottom();
+      this.shouldScrollToBottom = false;
+    }
+  }
+
+  private scrollToBottom(): void {
+    try {
+      if (this.messagesContainer) {
+        const element = this.messagesContainer.nativeElement;
+        element.scrollTop = element.scrollHeight;
+      }
+    } catch (err) {
+      console.error('Scroll to bottom failed:', err);
+    }
+  }
+
   SendMessage(event?: KeyboardEvent) {
     if (event) {
       event.preventDefault();
@@ -43,10 +72,12 @@ export class MemberMessagesComponent implements OnInit, OnDestroy {
     if (!this.otherUserId || !this.messageContent.trim()) return;
     
     const messageToSend = this.messageContent;
-    this.messageContent = ''; // Clear immediately
-    
+    this.messageContent = ''; 
     this.messagesService.sendMessage(this.otherUserId, messageToSend)
-      ?.catch(error => {
+      ?.then(() => {
+        this.shouldScrollToBottom = true;
+      })
+      .catch(error => {
         console.log(error);
       });
   }

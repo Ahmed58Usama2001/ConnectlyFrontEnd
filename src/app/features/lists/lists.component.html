@@ -1,11 +1,22 @@
+@if (isLoading()) {
+<div class="flex justify-center items-center py-20">
+    <div class="relative">
+        <div class="w-20 h-20 border-4 border-[#FA718A]/20 border-t-[#FA718A] rounded-full animate-spin"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <span class="text-3xl">💕</span>
+        </div>
+    </div>
+</div>
+}
+@else {
 <div class="m-3">
     <div class="flex bg-white/80 backdrop-blur-sm rounded-xl p-1 shadow-lg border border-[#FA718A]/20 w-fit">
         @for (tab of tabs; track $index) {
-        <button class="px-6 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 cursor-pointer"
+        <button
+            class="px-6 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 cursor-pointer"
             [class]="predicate === tab.value 
                 ? 'text-[#FA718A] bg-[#FA718A]/10 border-2 border-[#FA718A] shadow-md' 
-                : 'text-gray-600 hover:text-[#FA718A] hover:bg-[#FA718A]/5'" 
-            role="tab" 
+                : 'text-gray-600 hover:text-[#FA718A] hover:bg-[#FA718A]/5'" role="tab"
             (click)="setPredicate(tab.value)">
             {{tab.label}}
         </button>
@@ -28,3 +39,4 @@
     </div>
     }
 </div>
+}

@@ -1,6 +1,5 @@
-import { Component, inject, signal, ViewChild, viewChild } from '@angular/core';
+import { Component, inject, signal, ViewChild } from '@angular/core';
 import { MemberService } from '../../../core/services/member.service';
-import { Observable, map } from 'rxjs';
 import { Member } from '../../../shared/models/member';
 import { AsyncPipe } from '@angular/common';
 import { MemberCardComponent } from '../member-card/member-card.component';
@@ -18,8 +17,9 @@ import { FilterModalComponent } from '../../filter-modal/filter-modal.component'
 export class MemberListComponent {
   @ViewChild('filterModal') modal!: FilterModalComponent;
   private memberService = inject(MemberService);
-  protected paginatedMembers$!: Observable<Pagination<Member>>;
+  protected paginatedMembers = signal<Pagination<Member> | null>(null);
   protected params = new MemberParams();
+  protected isLoading = signal<boolean>(false);
   
   totalPages = signal(1);
 
@@ -28,13 +28,18 @@ export class MemberListComponent {
   }
 
   loadMembers() {
-    this.paginatedMembers$ = this.memberService.getMembers(this.params).pipe(
-      map(response => {
+    this.isLoading.set(true);
+    this.memberService.getMembers(this.params).subscribe({
+      next: (response) => {
         const calculatedTotalPages = Math.ceil(response.count / this.params.pageSize) || 1;
         this.totalPages.set(calculatedTotalPages);
-        return response;
-      })
-    );
+        this.paginatedMembers.set(response);
+        this.isLoading.set(false);
+      },
+      error: () => {
+        this.isLoading.set(false);
+      }
+    });
   }
 
   onPageChange(event: { pageIndex: number; pageSize: number }) {
@@ -60,5 +65,4 @@ export class MemberListComponent {
     this.params = data;
     this.loadMembers();
   }
-
 }

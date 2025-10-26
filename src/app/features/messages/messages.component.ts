@@ -20,6 +20,7 @@ export class MessagesComponent implements OnInit {
   protected pageIndex = 1;
   protected pageSize = 10;
   protected paginatedMessages = signal<Pagination<Message> | null>(null);
+  protected isLoading = signal<boolean>(false);
 
   tabs = [
     { label: 'Inbox', value: 'Inbox' },
@@ -37,10 +38,15 @@ export class MessagesComponent implements OnInit {
   }
 
   loadMessages() {
+    this.isLoading.set(true);
     this.messageService.getMessages(this.container, this.pageIndex, this.pageSize).subscribe({
       next: (response) => {
         this.paginatedMessages.set(response);
         this.fetchedContainer = this.container;
+        this.isLoading.set(false);
+      },
+      error: () => {
+        this.isLoading.set(false);
       }
     });
   }
@@ -50,7 +56,7 @@ export class MessagesComponent implements OnInit {
     this.messageService.deleteMessage(id).subscribe({
       next: () => {
         this.loadMessages();
-         const current = this.paginatedMessages();
+        const current = this.paginatedMessages();
         if (current) {
           const newData = current.data.filter(m => m.id !== id);
           const newCount = current.count > 0 ? current.count - 1 : 0;

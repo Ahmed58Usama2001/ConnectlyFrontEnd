@@ -31,6 +31,16 @@
   </div>
 
   <div class="overflow-x-auto">
+    @if (isLoading()) {
+    <div class="flex justify-center items-center py-20">
+      <div class="relative">
+        <div class="w-16 h-16 border-4 border-[#FA718A]/20 border-t-[#FA718A] rounded-full animate-spin"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <span class="text-2xl">💌</span>
+        </div>
+      </div>
+    </div>
+    } @else {
     <table class="w-full table table-fixed">
       <thead>
         <tr class="bg-gradient-to-r from-[#FA718A]/5 to-[#FDF1F6]/30">
@@ -104,9 +114,21 @@
             </div>
           </td>
         </tr>
+        }@empty {
+        <tr>
+          <td colspan="4" class="px-6 py-12">
+            <div class="text-center">
+              <div class="text-gray-400 text-6xl mb-4">
+                📭
+              </div>
+              <p class="text-xl text-gray-500">No messages found</p>
+            </div>
+          </td>
+        </tr>
         }
       </tbody>
     </table>
+    }
   </div>
 
   <div class="bg-gradient-to-r from-[#FDF1F6]/20 to-[#FA718A]/5 px-6 py-3 border-t border-[#FA718A]/10">

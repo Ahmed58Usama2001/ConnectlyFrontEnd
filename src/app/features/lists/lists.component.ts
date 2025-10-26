@@ -12,12 +12,13 @@ import { MemberCardComponent } from "../members/member-card/member-card.componen
 export class ListsComponent implements OnInit {
   private likesService = inject(LikesService);
   protected members = signal<Member[]>([]);
+  protected isLoading = signal<boolean>(false);
   protected predicate = 'liked';
 
   tabs = [
     { label: 'Liked', value: 'liked' },
     { label: 'Liked By', value: 'likedby' },
-    { label: 'Mutual Likes', value: 'mutual'}
+    { label: 'Mutual Likes', value: 'mutual' }
   ];
 
   ngOnInit(): void {
@@ -30,9 +31,13 @@ export class ListsComponent implements OnInit {
   }
 
   loadLikes() {
+    this.isLoading.set(true);
+
     this.likesService.getLikes(this.predicate).subscribe({
       next: members => {
         this.members.set(members);
+        this.isLoading.set(false);
+
       }
     });
   }

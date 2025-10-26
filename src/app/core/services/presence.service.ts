@@ -36,9 +36,8 @@ export class PresenceService {
     this.hubConnection.on('GetOnlineUsers', (userIds: string[]) => {
       this.onlineUsers.set(userIds);
     });
-
     this.hubConnection.on('NewMessageReceived', (message: Message) => {
-      this.toastService.Info(`New message from ${message.senderUserName}`)
+      this.toastService.Info(`New message from ${message.senderUserName}`);
     });
 
   }

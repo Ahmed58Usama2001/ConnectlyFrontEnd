@@ -14,38 +14,44 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './member-messages.component.html',
   styleUrl: './member-messages.component.css'
 })
-export class MemberMessagesComponent implements OnInit , OnDestroy {
+export class MemberMessagesComponent implements OnInit, OnDestroy {
  
   protected messagesService = inject(MessageService);
-  private route = inject(ActivatedRoute)
+  private route = inject(ActivatedRoute);
   protected memberService = inject(MemberService);
-  protected presenceService = inject(PresenceService)
+  protected presenceService = inject(PresenceService);
   protected messageContent = '';
-  
+  private otherUserId = '';
 
   ngOnInit(): void {
     this.route.parent?.paramMap.subscribe({
-      next: params=> {
-        const otherUserId = params.get('id');
+      next: params => {
+        const userId = params.get('id');
         
-        if(!otherUserId) throw new Error('Cannot connect to hub');
-        this.messagesService.createHubConnection(otherUserId);
+        if (!userId) throw new Error('Cannot connect to hub');
+        this.otherUserId = userId;
+        this.messagesService.createHubConnection(userId);
       }
     });
   }
 
- 
-
-  SendMessage() {
-    const recipientId = this.memberService.member()?.id;
-    if (!recipientId || !this.messageContent.trim()) return;
+  SendMessage(event?: KeyboardEvent) {
+    if (event) {
+      event.preventDefault();
+    }
     
-    this.messagesService.sendMessage(recipientId, this.messageContent)?.
-    then(() => this.messageContent = '').catch(error => console.log(error));
+    if (!this.otherUserId || !this.messageContent.trim()) return;
+    
+    const messageToSend = this.messageContent;
+    this.messageContent = ''; // Clear immediately
+    
+    this.messagesService.sendMessage(this.otherUserId, messageToSend)
+      ?.catch(error => {
+        console.log(error);
+      });
   }
 
-   ngOnDestroy(): void {
+  ngOnDestroy(): void {
     this.messagesService.stopHubConnection();
   }
-  
 }

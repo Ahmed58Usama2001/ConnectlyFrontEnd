@@ -20,6 +20,7 @@ export class MessageService {
   createHubConnection(otherUserId: string) {
     const currentUser = this.accountService.currentUser();
     if (!currentUser) return;
+    
     this.hubConnection = new HubConnectionBuilder()
       .withUrl(this.hubUrl + 'messages?userId=' + otherUserId, {
         accessTokenFactory: () => currentUser.token
@@ -29,12 +30,20 @@ export class MessageService {
 
     this.hubConnection.start().catch(error => console.log(error));
 
+    // Register ReceiveMessageThread handler - fired once on connection
     this.hubConnection.on('ReceiveMessageThread', (messages: Message[]) => {
-      this.messageThread.set(messages.map(m => ({ ...m, currentUserSender: m.senderId !== otherUserId })));
+      this.messageThread.set(messages.map(m => ({ 
+        ...m, 
+        currentUserSender: m.senderId !== otherUserId 
+      })));
+    });
 
-      this.hubConnection?.on('NewMessage', (message: Message) => {
-        this.messageThread.update(messages => [...messages, { ...message, currentUserSender: message.senderId === currentUser.id }]);
-      });
+    // Register NewMessage handler SEPARATELY - not nested inside ReceiveMessageThread
+    this.hubConnection.on('NewMessage', (message: Message) => {
+      this.messageThread.update(messages => [...messages, { 
+        ...message, 
+        currentUserSender: message.senderId === currentUser.id 
+      }]);
     });
   }
 

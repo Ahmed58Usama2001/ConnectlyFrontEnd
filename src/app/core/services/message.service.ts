@@ -26,11 +26,15 @@ export class MessageService {
       })
       .withAutomaticReconnect()
       .build();
-      
+
     this.hubConnection.start().catch(error => console.log(error));
 
     this.hubConnection.on('ReceiveMessageThread', (messages: Message[]) => {
-      this.messageThread.set(messages.map(m => ({ ...m, currentUserSender: m.senderId!== otherUserId })));
+      this.messageThread.set(messages.map(m => ({ ...m, currentUserSender: m.senderId !== otherUserId })));
+
+      this.hubConnection?.on('NewMessage', (message: Message) => {
+        this.messageThread.update(messages => [...messages, { ...message, currentUserSender: message.senderId === currentUser.id }]);
+      });
     });
   }
 
@@ -53,7 +57,7 @@ export class MessageService {
   }
 
   sendMessage(recipientId: string, content: string) {
-    return this.http.post<Message>(`${this.baseUrl}`, { recipientId, content });
+    return this.hubConnection?.invoke('SendMessage', { recipientId, content });
   }
 
   deleteMessage(id: number) {

@@ -20,7 +20,6 @@
         #messagesContainer
         class="flex flex-col flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-track-pink-50 scrollbar-thumb-pink-200 scroll-smooth">
         @for (message of messagesService.messageThread(); track message.id) {
-            <p>{{message.currentUserSender}}</p>
         <div class="message-wrapper" [class.sent]="message.currentUserSender"
             [class.received]="!message.currentUserSender">
             @if (!message.currentUserSender) {

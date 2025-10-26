@@ -20,16 +20,13 @@ export class MemberMessagesComponent implements OnInit {
   private route = inject(ActivatedRoute)
   protected memberService = inject(MemberService);
   protected presenceService = inject(PresenceService)
-  protected messages = signal<Message[]>([]);
   protected messageContent = '';
   
-  private shouldScrollToBottom = false;
 
   ngOnInit(): void {
     this.route.parent?.paramMap.subscribe({
       next: params=> {
         const otherUserId = params.get('id');
-
         
         if(!otherUserId) throw new Error('Cannot connect to hub');
         this.messagesService.createHubConnection(otherUserId);
@@ -39,28 +36,11 @@ export class MemberMessagesComponent implements OnInit {
 
  
 
- 
-  // loadMessages() {
-  //   this.messagesService.getMessageThread(this.memberService.member()!.id).subscribe({
-  //     next: _ => {
-  //       this.shouldScrollToBottom = true;
-  //     }
-  //   });
-  // }
-
   SendMessage() {
     const recipientId = this.memberService.member()?.id;
     if (!recipientId || !this.messageContent.trim()) return;
     
-    this.messagesService.sendMessage(recipientId, this.messageContent).subscribe({
-      next: message => {
-        this.messages.update(messages => {
-          message.currentUserSender = true;
-          return [...messages, message];
-        });
-        this.messageContent = '';
-        this.shouldScrollToBottom = true;
-      }
-    });
+    this.messagesService.sendMessage(recipientId, this.messageContent)?.
+    then(() => this.messageContent = '').catch(error => console.log(error));
   }
 }

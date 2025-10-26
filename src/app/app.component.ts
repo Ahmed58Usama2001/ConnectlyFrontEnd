@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { AccounService } from './core/services/accoun.service';
 import { NavComponent } from './layout/nav/nav.component';
+import { ConfirmDialogComponent } from "./shared/confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, NavComponent],
+  imports: [CommonModule, RouterOutlet, NavComponent, ConfirmDialogComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })

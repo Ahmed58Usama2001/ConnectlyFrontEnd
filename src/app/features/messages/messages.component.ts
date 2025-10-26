@@ -6,6 +6,7 @@ import { PaginatorComponent } from "../../shared/paginator/paginator.component";
 import { DatePipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { LoaderComponent } from "../../shared/loader/loader.component";
+import { ConfirmDialogService } from '../../core/services/confirm-dialog-service.service';
 
 @Component({
   selector: 'app-messages',
@@ -15,6 +16,7 @@ import { LoaderComponent } from "../../shared/loader/loader.component";
 })
 export class MessagesComponent implements OnInit {
   private messageService = inject(MessageService);
+  private ConfirmDialog = inject(ConfirmDialogService)
 
   protected container = 'Inbox';
   protected fetchedContainer = 'Inbox';
@@ -50,6 +52,14 @@ export class MessagesComponent implements OnInit {
         this.isLoading.set(false);
       }
     });
+  }
+
+  async ConfirmDelete(event: Event, id: number) {
+    event.stopPropagation();
+    const ok = await this.ConfirmDialog.confirm('Are you sure you want to delete this message?');
+    if (ok) {
+      this.deleteMessage(event, +id);
+    }
   }
 
   deleteMessage(event: Event, id: number) {

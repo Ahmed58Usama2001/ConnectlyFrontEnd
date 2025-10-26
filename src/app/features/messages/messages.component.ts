@@ -5,10 +5,11 @@ import { Message } from '../../shared/models/message';
 import { PaginatorComponent } from "../../shared/paginator/paginator.component";
 import { DatePipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { LoaderComponent } from "../../shared/loader/loader.component";
 
 @Component({
   selector: 'app-messages',
-  imports: [PaginatorComponent, DatePipe, RouterModule],
+  imports: [PaginatorComponent, DatePipe, RouterModule, LoaderComponent],
   templateUrl: './messages.component.html',
   styleUrl: './messages.component.css'
 })

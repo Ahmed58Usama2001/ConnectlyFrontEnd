@@ -2,10 +2,11 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { LikesService } from '../../core/services/likes.service';
 import { Member } from '../../shared/models/member';
 import { MemberCardComponent } from "../members/member-card/member-card.component";
+import { LoaderComponent } from "../../shared/loader/loader.component";
 
 @Component({
   selector: 'app-lists',
-  imports: [MemberCardComponent],
+  imports: [MemberCardComponent, LoaderComponent],
   templateUrl: './lists.component.html',
   styleUrl: './lists.component.css'
 })

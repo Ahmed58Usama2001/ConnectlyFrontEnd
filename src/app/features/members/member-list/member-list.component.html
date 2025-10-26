@@ -14,16 +14,9 @@
     </app-paginator>
     }
   </div>
-  
+
   @if (isLoading()) {
-  <div class="flex justify-center items-center py-20">
-    <div class="relative">
-      <div class="w-20 h-20 border-4 border-[#FA718A]/20 border-t-[#FA718A] rounded-full animate-spin"></div>
-      <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-        <span class="text-3xl">💕</span>
-      </div>
-    </div>
-  </div>
+  <app-loader></app-loader>
   } @else {
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
     @for (member of paginatedMembers()?.data; track member.id) {

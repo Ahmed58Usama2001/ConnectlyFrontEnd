@@ -6,10 +6,11 @@ import { Pagination } from '../../../shared/models/pagination';
 import { MemberParams } from '../../../shared/models/memberParams';
 import { PaginatorComponent } from '../../../shared/paginator/paginator.component';
 import { FilterModalComponent } from '../../filter-modal/filter-modal.component';
+import { LoaderComponent } from "../../../shared/loader/loader.component";
 
 @Component({
   selector: 'app-member-list',
-  imports: [MemberCardComponent, PaginatorComponent, FilterModalComponent],
+  imports: [MemberCardComponent, PaginatorComponent, FilterModalComponent, LoaderComponent],
   templateUrl: './member-list.component.html',
   styleUrl: './member-list.component.css'
 })

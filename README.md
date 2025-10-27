@@ -1,59 +1,80 @@
-# ConnectlyFrontEnd
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.4.
+---
 
-## Development server
+## 🌐 **Frontend README (Connectly Frontend)**
 
-To start a local development server, run:
+```markdown
+# 💞 Connectly Frontend
 
-```bash
-ng serve
-```
+The **Connectly Frontend** is a responsive **Angular + DaisyUI** web application that interacts with the Connectly API.  
+It provides an engaging, real-time user experience for chatting, liking, and browsing potential matches.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+---
 
-## Code scaffolding
+## ✨ Features
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- 🔐 **Authentication**
+  - Register & Login with JWT + Refresh Token
+  - Automatic token refresh
+  - Guards to protect routes
 
-```bash
-ng generate component component-name
-```
+- 🧑‍🤝‍🧑 **Member System**
+  - Browse members (with pagination)
+  - Filter by gender, age, and activity
+  - View and edit profile
+  - Upload photos and set a main photo
+  - Like / Unlike other members
+  - Lists of liked users and mutual likes
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+- 💬 **Real-Time Chat**
+  - Powered by **SignalR**
+  - Presence indicator (online/offline)
+  - Message seen status
+  - Toaster notifications for new messages
 
-```bash
-ng generate --help
-```
+- ⚙️ **UX Enhancements**
+  - DaisyUI + TailwindCSS styling
+  - Reusable components (dialogs, loaders, buttons)
+  - Custom pipes and pagination
+  - Toast notifications for feedback and alerts
 
-## Building
+---
 
-To build the project run:
+## 🏗️ Project Structure
 
-```bash
-ng build
-```
+src/
+│── app/
+│ ├── core/
+│ │ ├── guards/
+│ │ ├── interceptors/
+│ │ ├── services/
+│ ├── features/
+│ │ ├── account/
+│ │ ├── admin/
+│ │ ├── filter-modal/
+│ │ ├── home/
+│ │ ├── lists/
+│ │ ├── members/
+│ │ ├── messages/
+│ ├── layout/
+│ │ └── nav/
+│ ├── shared/
+│ ├── confirm-dialog/
+│ ├── delete-button/
+│ ├── errors/
+│ ├── image-upload/
+│ ├── loader/
+│ ├── models/
+│ ├── paginator/
+│ ├── pipes/
+│ ├── text-input/
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## 🧰 Technologies Used
 
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- **Angular 17+**
+- **TypeScript**
+- **DaisyUI + bootstrap**
+- **SignalR Client**
+- **RxJS**
+- **ngx-toastr**
+- **JWT Authentication**
